@@ -105,3 +105,10 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Local Editor Configurations (VS Code / Antigravity)
+.vscode/
+Directory.Build.props
+
+# User Personal Settings
+.agents/
