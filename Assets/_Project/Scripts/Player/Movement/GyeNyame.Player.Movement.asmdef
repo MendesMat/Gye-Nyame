@@ -1,0 +1,17 @@
+{
+    "name": "GyeNyame.Player.Movement",
+    "rootNamespace": "",
+    "references": [
+        "GUID:342d7811ef2bcbd408740ac6aaa00b0c",
+        "GyeNyame.Player.Contracts"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

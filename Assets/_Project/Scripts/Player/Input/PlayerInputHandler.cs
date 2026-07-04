@@ -1,49 +1,58 @@
-using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using GyeNyame.Core.EventBus;
+using GyeNyame.Player.Contracts.Messages;
 
 namespace GyeNyame.Player.Input
 {
     public class PlayerInputHandler : MonoBehaviour
     {
-        private PlayerInputActions inputActions;
-        public Vector2 MoveInput { get; private set; }
+        private PlayerInputActions _inputActions;
 
-        public event Action OnJumpPressed;
+        private void Awake() => _inputActions = new PlayerInputActions();
 
-        private void Awake() => inputActions = new();
-
-        void OnEnable()
+        private void OnEnable()
         {
-            inputActions.Player.Enable();
+            _inputActions.Player.Enable();
 
-            inputActions.Player.Move.performed += OnMovePerformed;
-            inputActions.Player.Move.canceled += OnMoveCanceled;
-            inputActions.Player.Jump.performed += OnJumpPerformed;
+            _inputActions.Player.Move.performed += OnMovePerformed;
+            _inputActions.Player.Move.canceled += OnMoveCanceled;
+
+            _inputActions.Player.Jump.performed += OnJumpPerformed;
         }
 
         private void OnDisable()
         {
-            inputActions.Player.Move.performed -= OnMovePerformed;
-            inputActions.Player.Move.canceled -= OnMoveCanceled;
-            inputActions.Player.Jump.performed -= OnJumpPerformed;
+            _inputActions.Player.Move.performed -= OnMovePerformed;
+            _inputActions.Player.Move.canceled -= OnMoveCanceled;
 
-            inputActions.Player.Disable();
+            _inputActions.Player.Jump.performed -= OnJumpPerformed;
+
+            _inputActions.Player.Disable();
         }
 
-        private void OnMovePerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx) => MoveInput = ctx.ReadValue<Vector2>();
-        private void OnMoveCanceled(UnityEngine.InputSystem.InputAction.CallbackContext ctx) => MoveInput = Vector2.zero;
-        private void OnJumpPerformed(UnityEngine.InputSystem.InputAction.CallbackContext ctx) => OnJumpPressed?.Invoke();
+        // Movement
+        private void OnMovePerformed(InputAction.CallbackContext ctx)
+            => EventBus.Publish(new PlayerMoveMessage(ctx.ReadValue<Vector2>()));
 
+        private void OnMoveCanceled(InputAction.CallbackContext ctx)
+            => EventBus.Publish(new PlayerMoveMessage(Vector2.zero));
+
+        // Jump
+        private void OnJumpPerformed(InputAction.CallbackContext ctx)
+            => EventBus.Publish(new PlayerJumpMessage());
+
+        // Switch Input Mode
         public void SwitchToPlayerMode()
         {
-            inputActions.UI.Disable();
-            inputActions.Player.Enable();
+            _inputActions.UI.Disable();
+            _inputActions.Player.Enable();
         }
 
         public void SwitchToUIMode()
         {
-            inputActions.Player.Disable();
-            inputActions.UI.Enable();
+            _inputActions.Player.Disable();
+            _inputActions.UI.Enable();
         }
     }
 }

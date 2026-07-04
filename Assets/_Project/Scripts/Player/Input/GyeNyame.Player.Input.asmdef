@@ -1,0 +1,19 @@
+{
+    "name": "GyeNyame.Player.Input",
+    "rootNamespace": "",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:fad023a7b2ce369418d8969d197531f1",
+        "GUID:342d7811ef2bcbd408740ac6aaa00b0c",
+        "GyeNyame.Player.Contracts"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
