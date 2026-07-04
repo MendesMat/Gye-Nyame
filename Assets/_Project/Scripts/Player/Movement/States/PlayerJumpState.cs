@@ -23,6 +23,8 @@ namespace GyeNyame.Player.Movement.States
                 lockDepth: _context.LockDepthDuringJump
             );
 
+            _context.ConsumeDashRequest();
+
             if (!_context.IsGrounded) return;
 
             if (_context.HasMoveInput)

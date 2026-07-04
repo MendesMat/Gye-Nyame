@@ -7,10 +7,12 @@ using GyeNyame.Player.Movement.States;
 namespace GyeNyame.Player.Movement
 {
     [RequireComponent(typeof(StateMachine))]
+    [RequireComponent(typeof(Rigidbody))]
     public class PlayerMovement : MonoBehaviour, IPlayerMovementContext
     {
         [Header("Components")]
-        [SerializeField] private Rigidbody rb;
+        [SerializeField] private StateMachine stateMachine;
+        [SerializeField] private Rigidbody rigidBody;
 
         [Header("Movement Properties")]
         [SerializeField] private float speed;
@@ -24,6 +26,11 @@ namespace GyeNyame.Player.Movement
         [SerializeField] private float airSpeedMultiplier = 0.5f;
         [SerializeField] private bool lockDepthDuringJump = true;
 
+        [Header("Dash Properties")]
+        [SerializeField] private float dashSpeedMultiplier = 3f;
+        [SerializeField] private float dashDuration = 0.2f;
+        [SerializeField] private float dashCooldown = 1f;
+
         [Header("Cooldowns")]
         [SerializeField] private float jumpCooldown = 0.2f;
 
@@ -33,58 +40,80 @@ namespace GyeNyame.Player.Movement
         private Vector2 _currentMoveInput;
         private float _lastLandTime;
         private bool _jumpRequested;
-
-        private StateMachine _stateMachine;
+        private bool _dashRequested;
+        private float _lastDashTime;
+        private Vector2 _facingDirection = Vector2.right;
 
         // IPlayerMovementContext
         public bool HasMoveInput => _currentMoveInput != Vector2.zero;
         public bool IsGrounded => _isGrounded;
+        public Vector2 CurrentMoveInput => _currentMoveInput;
+        public Vector2 FacingDirection => _facingDirection;
+
         public float AirSpeedMultiplier => airSpeedMultiplier;
         public bool LockDepthDuringJump => lockDepthDuringJump;
+        public float DashSpeedMultiplier => dashSpeedMultiplier;
+        public float DashDuration => dashDuration;
 
         private void Awake()
         {
             _groundYPosition = transform.position.y;
-            _stateMachine = GetComponent<StateMachine>();
             InitializeStateMachine();
         }
 
         private void Start()
         {
-            _stateMachine.ChangeState(_stateMachine.GetOrCreateState<PlayerIdleState>());
+            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerIdleState>());
         }
 
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerMoveMessage>(OnPlayerMove);
             EventBus.Subscribe<PlayerJumpMessage>(OnPlayerJump);
+            EventBus.Subscribe<PlayerDashMessage>(OnPlayerDash);
         }
 
         private void OnDisable()
         {
             EventBus.Unsubscribe<PlayerMoveMessage>(OnPlayerMove);
             EventBus.Unsubscribe<PlayerJumpMessage>(OnPlayerJump);
+            EventBus.Unsubscribe<PlayerDashMessage>(OnPlayerDash);
         }
 
-        // Event Handlers
-        private void OnPlayerMove(PlayerMoveMessage message) => _currentMoveInput = message.MoveInput;
-        private void OnPlayerJump(PlayerJumpMessage message) => _jumpRequested = true;
+        private void OnPlayerMove(PlayerMoveMessage message)
+        {
+            _currentMoveInput = message.MoveInput;
+            if (_currentMoveInput != Vector2.zero)
+            {
+                _facingDirection = _currentMoveInput.normalized;
+            }
+        }
 
-        // Initialization
+        private void OnPlayerJump(PlayerJumpMessage message) => _jumpRequested = true;
+        private void OnPlayerDash(PlayerDashMessage message) => _dashRequested = true;
+
         private void InitializeStateMachine()
         {
-            _stateMachine.RegisterState<PlayerIdleState>(new StateFactory<PlayerIdleState>(sm => new PlayerIdleState(sm, this)));
-            _stateMachine.RegisterState<PlayerWalkState>(new StateFactory<PlayerWalkState>(sm => new PlayerWalkState(sm, this)));
-            _stateMachine.RegisterState<PlayerJumpState>(new StateFactory<PlayerJumpState>(sm => new PlayerJumpState(sm, this)));
+            stateMachine.RegisterState<PlayerIdleState>(new StateFactory<PlayerIdleState>(sm => new PlayerIdleState(sm, this)));
+            stateMachine.RegisterState<PlayerWalkState>(new StateFactory<PlayerWalkState>(sm => new PlayerWalkState(sm, this)));
+            stateMachine.RegisterState<PlayerJumpState>(new StateFactory<PlayerJumpState>(sm => new PlayerJumpState(sm, this)));
+            stateMachine.RegisterState<PlayerDashState>(new StateFactory<PlayerDashState>(sm => new PlayerDashState(sm, this)));
         }
 
-        // IPlayerMovementContext
         public bool ConsumeJumpRequest()
         {
             if (!_jumpRequested) return false;
-            
+
             _jumpRequested = false;
             return Time.time >= _lastLandTime + jumpCooldown;
+        }
+
+        public bool ConsumeDashRequest()
+        {
+            if (!_dashRequested) return false;
+
+            _dashRequested = false;
+            return Time.time >= _lastDashTime + dashCooldown;
         }
 
         public void ExecuteJump()
@@ -93,30 +122,55 @@ namespace GyeNyame.Player.Movement
             _isGrounded = false;
         }
 
+        public void ExecuteDash()
+        {
+            _lastDashTime = Time.time;
+        }
+
         public void UpdateMovement(float speedMultiplier, bool lockDepth)
         {
-            var calculatedTargetPosition = rb.position;
+            var targetPosition = rigidBody.position;
 
-            // Horizontal Movement
             var depthInput = lockDepth ? 0f : _currentMoveInput.y;
             var horizontalMovement = new Vector3(_currentMoveInput.x, 0f, depthInput * depthSpeedMultiplier) * speedMultiplier;
-            calculatedTargetPosition += horizontalMovement * speed * Time.fixedDeltaTime;
+            targetPosition += horizontalMovement * speed * Time.fixedDeltaTime;
 
-            // Vertical Movement
+            targetPosition = ApplyVerticalMovement(targetPosition);
+            rigidBody.MovePosition(targetPosition);
+        }
+
+        public void UpdateDirectionalMovement(Vector2 direction, float speedMultiplier)
+        {
+            var targetPosition = rigidBody.position;
+
+            var horizontalMovement = new Vector3(direction.x, 0f, direction.y * depthSpeedMultiplier) * speedMultiplier;
+            targetPosition += horizontalMovement * speed * Time.fixedDeltaTime;
+
+            targetPosition = ApplyVerticalMovement(targetPosition);
+            rigidBody.MovePosition(targetPosition);
+        }
+
+        private Vector3 ApplyVerticalMovement(Vector3 targetPosition)
+        {
             if (!_isGrounded) _verticalVelocity -= gravity * Time.fixedDeltaTime;
-            calculatedTargetPosition.y += _verticalVelocity * Time.fixedDeltaTime;
+            targetPosition.y += _verticalVelocity * Time.fixedDeltaTime;
 
-            // Collision / Landing Check
-            if (!_isGrounded && _verticalVelocity <= 0f && calculatedTargetPosition.y <= _groundYPosition)
-            {
-                _verticalVelocity = 0f;
-                _isGrounded = true;
-                _lastLandTime = Time.time;
-                calculatedTargetPosition.y = _groundYPosition;
-            }
+            if (ShouldLand(targetPosition)) targetPosition = Land(targetPosition);
 
-            // Apply Physics
-            rb.MovePosition(calculatedTargetPosition);
+            return targetPosition;
+        }
+
+        private bool ShouldLand(Vector3 targetPosition) =>
+            !_isGrounded && _verticalVelocity <= 0f && targetPosition.y <= _groundYPosition;
+
+        private Vector3 Land(Vector3 targetPosition)
+        {
+            _verticalVelocity = 0f;
+            _isGrounded = true;
+            _lastLandTime = Time.time;
+            targetPosition.y = _groundYPosition;
+            return targetPosition;
         }
     }
 }
+

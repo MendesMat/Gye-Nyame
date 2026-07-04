@@ -1,0 +1,51 @@
+using UnityEngine;
+using GyeNyame.Core.StateMachine;
+
+namespace GyeNyame.Player.Movement.States
+{
+    public class PlayerDashState : BaseState
+    {
+        private readonly IPlayerMovementContext _context;
+
+        private Vector2 _dashDirection;
+        private float _dashStartTime;
+
+        public PlayerDashState(IStateMachine stateMachine, IPlayerMovementContext context) : base(stateMachine)
+        {
+            _context = context;
+        }
+
+        public override void Enter()
+        {
+            _context.ExecuteDash();
+            _dashStartTime = Time.time;
+            _dashDirection = ResolveDashDirection();
+        }
+
+        public override void FixedUpdate()
+        {
+            _context.UpdateDirectionalMovement(_dashDirection, _context.DashSpeedMultiplier);
+
+            if (HasDashExpired()) TransitionToGroundState();
+        }
+
+        private Vector2 ResolveDashDirection()
+        {
+            return _context.FacingDirection;
+        }
+
+        private bool HasDashExpired() => Time.time >= _dashStartTime + _context.DashDuration;
+
+        private void TransitionToGroundState()
+        {
+            if (_context.HasMoveInput)
+            {
+                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerWalkState>());
+            }
+            else
+            {
+                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerIdleState>());
+            }
+        }
+    }
+}

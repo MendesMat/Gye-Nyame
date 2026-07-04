@@ -17,16 +17,16 @@ namespace GyeNyame.Player.Input
 
             _inputActions.Player.Move.performed += OnMovePerformed;
             _inputActions.Player.Move.canceled += OnMoveCanceled;
-
             _inputActions.Player.Jump.performed += OnJumpPerformed;
+            _inputActions.Player.Dash.performed += OnDashPerformed;
         }
 
         private void OnDisable()
         {
             _inputActions.Player.Move.performed -= OnMovePerformed;
             _inputActions.Player.Move.canceled -= OnMoveCanceled;
-
             _inputActions.Player.Jump.performed -= OnJumpPerformed;
+            _inputActions.Player.Dash.performed -= OnDashPerformed;
 
             _inputActions.Player.Disable();
         }
@@ -38,9 +38,12 @@ namespace GyeNyame.Player.Input
         private void OnMoveCanceled(InputAction.CallbackContext ctx)
             => EventBus.Publish(new PlayerMoveMessage(Vector2.zero));
 
-        // Jump
+        // Actions
         private void OnJumpPerformed(InputAction.CallbackContext ctx)
             => EventBus.Publish(new PlayerJumpMessage());
+
+        private void OnDashPerformed(InputAction.CallbackContext ctx)
+            => EventBus.Publish(new PlayerDashMessage());
 
         // Switch Input Mode
         public void SwitchToPlayerMode()
