@@ -55,6 +55,7 @@ namespace GyeNyame.Player.Movement
         public float DashSpeedMultiplier => dashSpeedMultiplier;
         public float DashDuration => dashDuration;
 
+        #region Lifecycle
         private void Awake()
         {
             _groundYPosition = transform.position.y;
@@ -80,18 +81,6 @@ namespace GyeNyame.Player.Movement
             EventBus.Unsubscribe<PlayerDashMessage>(OnPlayerDash);
         }
 
-        private void OnPlayerMove(PlayerMoveMessage message)
-        {
-            _currentMoveInput = message.MoveInput;
-            if (_currentMoveInput != Vector2.zero)
-            {
-                _facingDirection = _currentMoveInput.normalized;
-            }
-        }
-
-        private void OnPlayerJump(PlayerJumpMessage message) => _jumpRequested = true;
-        private void OnPlayerDash(PlayerDashMessage message) => _dashRequested = true;
-
         private void InitializeStateMachine()
         {
             stateMachine.RegisterState<PlayerIdleState>(new StateFactory<PlayerIdleState>(sm => new PlayerIdleState(sm, this)));
@@ -99,32 +88,16 @@ namespace GyeNyame.Player.Movement
             stateMachine.RegisterState<PlayerJumpState>(new StateFactory<PlayerJumpState>(sm => new PlayerJumpState(sm, this)));
             stateMachine.RegisterState<PlayerDashState>(new StateFactory<PlayerDashState>(sm => new PlayerDashState(sm, this)));
         }
+        #endregion
 
-        public bool ConsumeJumpRequest()
+        #region Horizontal Movement
+        private void OnPlayerMove(PlayerMoveMessage message)
         {
-            if (!_jumpRequested) return false;
-
-            _jumpRequested = false;
-            return Time.time >= _lastLandTime + jumpCooldown;
-        }
-
-        public bool ConsumeDashRequest()
-        {
-            if (!_dashRequested) return false;
-
-            _dashRequested = false;
-            return Time.time >= _lastDashTime + dashCooldown;
-        }
-
-        public void ExecuteJump()
-        {
-            _verticalVelocity = jumpForce;
-            _isGrounded = false;
-        }
-
-        public void ExecuteDash()
-        {
-            _lastDashTime = Time.time;
+            _currentMoveInput = message.MoveInput;
+            if (_currentMoveInput != Vector2.zero)
+            {
+                _facingDirection = _currentMoveInput.normalized;
+            }
         }
 
         public void UpdateMovement(float speedMultiplier, bool lockDepth)
@@ -138,16 +111,23 @@ namespace GyeNyame.Player.Movement
             targetPosition = ApplyVerticalMovement(targetPosition);
             rigidBody.MovePosition(targetPosition);
         }
+        #endregion
 
-        public void UpdateDirectionalMovement(Vector2 direction, float speedMultiplier)
+        #region Jump Mechanic
+        private void OnPlayerJump(PlayerJumpMessage message) => _jumpRequested = true;
+
+        public bool ConsumeJumpRequest()
         {
-            var targetPosition = rigidBody.position;
+            if (!_jumpRequested) return false;
 
-            var horizontalMovement = new Vector3(direction.x, 0f, direction.y * depthSpeedMultiplier) * speedMultiplier;
-            targetPosition += horizontalMovement * speed * Time.fixedDeltaTime;
+            _jumpRequested = false;
+            return Time.time >= _lastLandTime + jumpCooldown;
+        }
 
-            targetPosition = ApplyVerticalMovement(targetPosition);
-            rigidBody.MovePosition(targetPosition);
+        public void ExecuteJump()
+        {
+            _verticalVelocity = jumpForce;
+            _isGrounded = false;
         }
 
         private Vector3 ApplyVerticalMovement(Vector3 targetPosition)
@@ -171,6 +151,32 @@ namespace GyeNyame.Player.Movement
             targetPosition.y = _groundYPosition;
             return targetPosition;
         }
+        #endregion
+
+        #region Dash Mechanic
+        private void OnPlayerDash(PlayerDashMessage message) => _dashRequested = true;
+
+        public bool ConsumeDashRequest()
+        {
+            if (!_dashRequested) return false;
+
+            _dashRequested = false;
+            return Time.time >= _lastDashTime + dashCooldown;
+        }
+
+        public void ExecuteDash() => _lastDashTime = Time.time;
+
+        public void UpdateDirectionalMovement(Vector2 direction, float speedMultiplier)
+        {
+            var targetPosition = rigidBody.position;
+
+            var horizontalMovement = new Vector3(direction.x, 0f, direction.y * depthSpeedMultiplier) * speedMultiplier;
+            targetPosition += horizontalMovement * speed * Time.fixedDeltaTime;
+
+            targetPosition = ApplyVerticalMovement(targetPosition);
+            rigidBody.MovePosition(targetPosition);
+        }
+        #endregion
     }
 }
 

@@ -1,4 +1,4 @@
-using GyeNyame.Core.EventBus.Messages.StateMachine;
+using GyeNyame.Core.StateMachine.Messages;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

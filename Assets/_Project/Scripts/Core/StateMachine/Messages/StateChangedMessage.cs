@@ -1,6 +1,7 @@
+using GyeNyame.Core.EventBus;
 using GyeNyame.Core.StateMachine;
 
-namespace GyeNyame.Core.EventBus.Messages.StateMachine
+namespace GyeNyame.Core.StateMachine.Messages
 {
     public class StateChangedMessage : IMessage
     {

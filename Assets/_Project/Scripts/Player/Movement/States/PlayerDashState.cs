@@ -29,23 +29,16 @@ namespace GyeNyame.Player.Movement.States
             if (HasDashExpired()) TransitionToGroundState();
         }
 
-        private Vector2 ResolveDashDirection()
-        {
-            return _context.FacingDirection;
-        }
+        private Vector2 ResolveDashDirection() => _context.FacingDirection;
 
         private bool HasDashExpired() => Time.time >= _dashStartTime + _context.DashDuration;
 
         private void TransitionToGroundState()
         {
-            if (_context.HasMoveInput)
-            {
-                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerWalkState>());
-            }
-            else
-            {
+            if(!_context.HasMoveInput) 
                 StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerIdleState>());
-            }
+
+            StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerWalkState>());
         }
     }
 }
