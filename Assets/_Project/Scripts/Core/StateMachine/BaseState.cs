@@ -6,6 +6,8 @@ namespace GyeNyame.Core.StateMachine
     {
         protected IStateMachine StateMachine { get; }
         public event Action<BaseState> OnStateExit;
+        
+        public virtual string StateName => GetType().Name;
 
         protected BaseState(IStateMachine stateMachine)
         {

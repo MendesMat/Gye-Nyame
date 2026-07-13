@@ -1,6 +1,7 @@
 using UnityEngine;
 using GyeNyame.Core.EventBus;
-using GyeNyame.Player.Contracts.Messages;
+using GyeNyame.Core.Contracts.Messages;
+using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Core.StateMachine;
 using GyeNyame.Player.Movement.States;
 
@@ -8,7 +9,7 @@ namespace GyeNyame.Player.Movement
 {
     [RequireComponent(typeof(StateMachine))]
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerMovement : MonoBehaviour, IPlayerMovementContext
+    public class PlayerMovement : MonoBehaviour, IPlayerMovementContext, IPlayerLocomotion
     {
         [Header("Components")]
         [SerializeField] private StateMachine stateMachine;
@@ -62,16 +63,12 @@ namespace GyeNyame.Player.Movement
             InitializeStateMachine();
         }
 
-        private void Start()
-        {
-            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerIdleState>());
-        }
-
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerMoveMessage>(OnPlayerMove);
             EventBus.Subscribe<PlayerJumpMessage>(OnPlayerJump);
             EventBus.Subscribe<PlayerDashMessage>(OnPlayerDash);
+            EventBus.Subscribe<EndCombatMessage>(OnEndCombatMessage);
         }
 
         private void OnDisable()
@@ -79,6 +76,12 @@ namespace GyeNyame.Player.Movement
             EventBus.Unsubscribe<PlayerMoveMessage>(OnPlayerMove);
             EventBus.Unsubscribe<PlayerJumpMessage>(OnPlayerJump);
             EventBus.Unsubscribe<PlayerDashMessage>(OnPlayerDash);
+            EventBus.Unsubscribe<EndCombatMessage>(OnEndCombatMessage);
+        }
+
+        private void Start()
+        {
+            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerIdleState>());
         }
 
         private void InitializeStateMachine()
@@ -94,13 +97,25 @@ namespace GyeNyame.Player.Movement
         private void OnPlayerMove(PlayerMoveMessage message)
         {
             _currentMoveInput = message.MoveInput;
+
             if (_currentMoveInput != Vector2.zero)
             {
                 _facingDirection = _currentMoveInput.normalized;
             }
         }
 
-        public void UpdateMovement(float speedMultiplier, bool lockDepth)
+        private void OnEndCombatMessage(EndCombatMessage message)
+        {
+            if (HasMoveInput)
+            {
+                stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerWalkState>());
+                return;
+            }
+            
+            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerIdleState>());
+        }
+
+        public void UpdateMovement(float speedMultiplier, bool lockDepth = false)
         {
             var targetPosition = rigidBody.position;
 

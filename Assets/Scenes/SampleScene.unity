@@ -445,7 +445,9 @@ GameObject:
   - component: {fileID: 1082542548}
   - component: {fileID: 1082542550}
   - component: {fileID: 1082542549}
+  - component: {fileID: 1082542552}
   - component: {fileID: 1082542547}
+  - component: {fileID: 1082542551}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -488,7 +490,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2085074046}
-  - {fileID: 2094300406}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1082542547
@@ -566,6 +567,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dbc4f4a63f1b7b45b663b7a2a36ccfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GyeNyame.Core::GyeNyame.Core.StateMachine.StateMachine
+--- !u!114 &1082542551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082542542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4de46edefe8b54c8c70f81e6b52d0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Player.Combat::GyeNyame.Player.Combat.PlayerCombat
+  stateMachine: {fileID: 1082542550}
+  inputBuffer: {fileID: 1082542552}
+  lightAttacks:
+  - {fileID: 11400000, guid: 00e425d66368be54f96fcfa08a5b39e2, type: 2}
+  - {fileID: 11400000, guid: 4dd4c8df2ec4552499c7512a4b2be0e2, type: 2}
+  heavyAttack: {fileID: 11400000, guid: 31ac0185395ccb048943ca1d876fd84c, type: 2}
+--- !u!114 &1082542552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082542542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 834dbe8f069872447bc0fc5132c87eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Core::GyeNyame.Core.InputBuffer.InputBuffer
 --- !u!1 &1378792616
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,39 +817,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Animation.PlayerAnimationHandler
   animator: {fileID: 2085074048}
   spriteRenderer: {fileID: 2085074047}
-  stateMachine: {fileID: 1082542550}
-  playerMovement: {fileID: 1082542547}
---- !u!1 &2094300405
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2094300406}
-  m_Layer: 0
-  m_Name: Combat
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2094300406
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2094300405}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1082542546}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

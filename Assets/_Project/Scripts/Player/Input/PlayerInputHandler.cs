@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using GyeNyame.Core.EventBus;
-using GyeNyame.Player.Contracts.Messages;
+using GyeNyame.Core.Contracts.Messages;
 
 namespace GyeNyame.Player.Input
 {
@@ -19,6 +19,8 @@ namespace GyeNyame.Player.Input
             _inputActions.Player.Move.canceled += OnMoveCanceled;
             _inputActions.Player.Jump.performed += OnJumpPerformed;
             _inputActions.Player.Dash.performed += OnDashPerformed;
+            _inputActions.Player.AttackLight.performed += OnAttackLightPerformed;
+            _inputActions.Player.AttackHeavy.performed += OnAttackHeavyPerformed;
         }
 
         private void OnDisable()
@@ -27,6 +29,8 @@ namespace GyeNyame.Player.Input
             _inputActions.Player.Move.canceled -= OnMoveCanceled;
             _inputActions.Player.Jump.performed -= OnJumpPerformed;
             _inputActions.Player.Dash.performed -= OnDashPerformed;
+            _inputActions.Player.AttackLight.performed -= OnAttackLightPerformed;
+            _inputActions.Player.AttackHeavy.performed -= OnAttackHeavyPerformed;
 
             _inputActions.Player.Disable();
         }
@@ -44,6 +48,12 @@ namespace GyeNyame.Player.Input
 
         private void OnDashPerformed(InputAction.CallbackContext ctx)
             => EventBus.Publish(new PlayerDashMessage());
+
+        private void OnAttackLightPerformed(InputAction.CallbackContext ctx)
+            => EventBus.Publish(new PlayerAttackLightMessage());
+
+        private void OnAttackHeavyPerformed(InputAction.CallbackContext ctx)
+            => EventBus.Publish(new PlayerAttackHeavyMessage());
 
         // Switch Input Mode
         public void SwitchToPlayerMode()
