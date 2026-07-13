@@ -115,6 +115,19 @@ namespace GyeNyame.Player.Movement
         public void SetFacingDirectionLock(bool isLocked)
         {
             _isFacingDirectionLocked = isLocked;
+
+            if (!isLocked)
+            {
+                if (_currentMoveInput.x != 0f)
+                {
+                    _facingDirectionX = Mathf.Sign(_currentMoveInput.x);
+                }
+
+                if (_currentMoveInput != Vector2.zero)
+                {
+                    _facingDirection = _currentMoveInput.normalized;
+                }
+            }
         }
 
         private void OnEndCombatMessage(EndCombatMessage message)
