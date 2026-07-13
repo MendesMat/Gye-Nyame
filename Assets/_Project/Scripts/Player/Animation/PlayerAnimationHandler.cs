@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GyeNyame.Core.EventBus;
 using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.Contracts.Messages;
+using GyeNyame.Core.Contracts.Interfaces;
 using UnityEngine;
 
 namespace GyeNyame.Player.Animation
@@ -16,6 +17,7 @@ namespace GyeNyame.Player.Animation
         [SerializeField] private SpriteRenderer spriteRenderer;
 
         private IStateMachine _stateMachine;
+        private IPlayerLocomotion _locomotionContext;
         private readonly Dictionary<string, int> _stateToHash = new();
 
         private float _facingDirectionX = 1f;
@@ -42,19 +44,27 @@ namespace GyeNyame.Player.Animation
         private void Awake()
         {
             _stateMachine = GetComponentInParent<IStateMachine>();
+            _locomotionContext = GetComponentInParent<IPlayerLocomotion>();
             SetupAnimator();
         }
 
         private void OnEnable()
         {
             if (_stateMachine != null) _stateMachine.OnStateChanged += PlayAnimationForState;
-            EventBus.Subscribe<PlayerMoveMessage>(OnPlayerMove);
         }
 
         private void OnDisable()
         {
             if (_stateMachine != null) _stateMachine.OnStateChanged -= PlayAnimationForState;
-            EventBus.Unsubscribe<PlayerMoveMessage>(OnPlayerMove);
+        }
+
+        private void Update()
+        {
+            if (_locomotionContext != null && _locomotionContext.FacingDirectionX != 0f)
+            {
+                _facingDirectionX = _locomotionContext.FacingDirectionX;
+                FlipSpriteTowardsFacingDirection();
+            }
         }
         #endregion
 
@@ -83,14 +93,6 @@ namespace GyeNyame.Player.Animation
         #endregion
 
         #region Event Handlers
-        private void OnPlayerMove(PlayerMoveMessage message)
-        {
-            if (message.MoveInput.x != 0f) 
-            {
-                _facingDirectionX = message.MoveInput.x;
-                FlipSpriteTowardsFacingDirection();
-            }
-        }
         #endregion
 
         #region Animation

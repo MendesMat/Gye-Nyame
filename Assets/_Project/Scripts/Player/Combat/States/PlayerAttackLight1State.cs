@@ -18,12 +18,19 @@ namespace GyeNyame.Player.Combat.States
 
         public override void Enter()
         {
+            _locomotionContext?.SetFacingDirectionLock(true);
             _combatContext.InputBuffer.ConsumeCommand<PlayerAttackLightMessage>();
         }
 
         public override void FixedUpdate()
         {
             _locomotionContext?.UpdateMovement(0f, false);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            _locomotionContext?.SetFacingDirectionLock(false);
         }
 
         public override void Update()

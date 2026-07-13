@@ -45,6 +45,7 @@ namespace GyeNyame.Player.Movement
         private float _lastDashTime;
         private Vector2 _facingDirection = Vector2.right;
         private float _facingDirectionX;
+        private bool _isFacingDirectionLocked;
 
         // IPlayerMovementContext
         public bool HasMoveInput => _currentMoveInput != Vector2.zero;
@@ -100,15 +101,20 @@ namespace GyeNyame.Player.Movement
         {
             _currentMoveInput = message.MoveInput;
 
-            if (_currentMoveInput.x != 0f)
+            if (_currentMoveInput.x != 0f && !_isFacingDirectionLocked)
             {
                 _facingDirectionX = Mathf.Sign(_currentMoveInput.x);
             }
 
-            if (_currentMoveInput != Vector2.zero)
+            if (_currentMoveInput != Vector2.zero && !_isFacingDirectionLocked)
             {
                 _facingDirection = _currentMoveInput.normalized;
             }
+        }
+
+        public void SetFacingDirectionLock(bool isLocked)
+        {
+            _isFacingDirectionLocked = isLocked;
         }
 
         private void OnEndCombatMessage(EndCombatMessage message)

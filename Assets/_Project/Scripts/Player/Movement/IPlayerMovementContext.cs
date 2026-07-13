@@ -22,5 +22,6 @@ namespace GyeNyame.Player.Movement
         void ExecuteDash();
         void UpdateMovement(float speedMultiplier, bool lockDepth);
         void UpdateDirectionalMovement(Vector2 direction, float speedMultiplier);
+        void SetFacingDirectionLock(bool isLocked);
     }
 }
