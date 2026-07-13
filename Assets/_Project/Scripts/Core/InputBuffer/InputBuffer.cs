@@ -15,6 +15,16 @@ namespace GyeNyame.Core.InputBuffer
         {
             var type = typeof(T);
             var currentTime = Time.time;
+
+            for (int i = 0; i < _commands.Count; i++)
+            {
+                if (_commands[i].MessageType == type)
+                {
+                    _commands[i] = new BufferedCommand(type, currentTime, currentTime + bufferTime);
+                    return;
+                }
+            }
+
             _commands.Add(new BufferedCommand(type, currentTime, currentTime + bufferTime));
         }
 
@@ -45,6 +55,11 @@ namespace GyeNyame.Core.InputBuffer
                     break;
                 }
             }
+        }
+
+        public void Clear()
+        {
+            _commands.Clear();
         }
 
         private void CleanExpiredCommands()

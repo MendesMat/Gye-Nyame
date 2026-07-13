@@ -44,12 +44,14 @@ namespace GyeNyame.Player.Movement
         private bool _dashRequested;
         private float _lastDashTime;
         private Vector2 _facingDirection = Vector2.right;
+        private float _facingDirectionX;
 
         // IPlayerMovementContext
         public bool HasMoveInput => _currentMoveInput != Vector2.zero;
         public bool IsGrounded => _isGrounded;
         public Vector2 CurrentMoveInput => _currentMoveInput;
         public Vector2 FacingDirection => _facingDirection;
+        public float FacingDirectionX => _facingDirectionX;
 
         public float AirSpeedMultiplier => airSpeedMultiplier;
         public bool LockDepthDuringJump => lockDepthDuringJump;
@@ -97,6 +99,11 @@ namespace GyeNyame.Player.Movement
         private void OnPlayerMove(PlayerMoveMessage message)
         {
             _currentMoveInput = message.MoveInput;
+
+            if (_currentMoveInput.x != 0f)
+            {
+                _facingDirectionX = Mathf.Sign(_currentMoveInput.x);
+            }
 
             if (_currentMoveInput != Vector2.zero)
             {

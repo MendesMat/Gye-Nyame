@@ -29,7 +29,11 @@ namespace GyeNyame.Player.Movement.States
             if (HasDashExpired()) TransitionToGroundState();
         }
 
-        private Vector2 ResolveDashDirection() => _context.FacingDirection;
+        private Vector2 ResolveDashDirection()
+        {
+            if (_context.HasMoveInput) return _context.CurrentMoveInput.normalized;
+            return new Vector2(_context.FacingDirectionX, 0f);
+        }
 
         private bool HasDashExpired() => Time.time >= _dashStartTime + _context.DashDuration;
 

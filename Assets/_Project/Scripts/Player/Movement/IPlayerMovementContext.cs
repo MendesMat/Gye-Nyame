@@ -8,6 +8,7 @@ namespace GyeNyame.Player.Movement
         bool IsGrounded { get; }
         Vector2 CurrentMoveInput { get; }
         Vector2 FacingDirection { get; }
+        float FacingDirectionX { get; }
 
         float AirSpeedMultiplier { get; }
         bool LockDepthDuringJump { get; }

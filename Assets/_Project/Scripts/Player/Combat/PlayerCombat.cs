@@ -37,6 +37,8 @@ namespace GyeNyame.Player.Combat
             EventBus.Subscribe<PlayerAttackHeavyMessage>(OnAttackHeavy);
             EventBus.Subscribe<AnimationCancelWindowMessage>(OnAnimationCancelWindow);
             EventBus.Subscribe<AnimationFinishAttackMessage>(OnAnimationFinishAttack);
+            EventBus.Subscribe<PlayerDashMessage>(OnDashMessage);
+            EventBus.Subscribe<PlayerJumpMessage>(OnJumpMessage);
         }
 
         private void OnDisable()
@@ -45,6 +47,8 @@ namespace GyeNyame.Player.Combat
             EventBus.Unsubscribe<PlayerAttackHeavyMessage>(OnAttackHeavy);
             EventBus.Unsubscribe<AnimationCancelWindowMessage>(OnAnimationCancelWindow);
             EventBus.Unsubscribe<AnimationFinishAttackMessage>(OnAnimationFinishAttack);
+            EventBus.Unsubscribe<PlayerDashMessage>(OnDashMessage);
+            EventBus.Unsubscribe<PlayerJumpMessage>(OnJumpMessage);
         }
 
         private void Update()
@@ -54,12 +58,14 @@ namespace GyeNyame.Player.Combat
 
             if (inputBuffer.HasCommand<PlayerAttackLightMessage>())
             {
+                inputBuffer.ConsumeCommand<PlayerAttackLightMessage>();
                 stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerAttackLight1State>());
                 return;
             }
 
             if (inputBuffer.HasCommand<PlayerAttackHeavyMessage>())
             {
+                inputBuffer.ConsumeCommand<PlayerAttackHeavyMessage>();
                 stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerAttackHeavyState>());
             }
         }
@@ -98,7 +104,24 @@ namespace GyeNyame.Player.Combat
         private void OnAnimationFinishAttack(AnimationFinishAttackMessage message)
         {
             IsCancelWindowOpen = false;
+            inputBuffer.Clear();
             EventBus.Publish(new EndCombatMessage());
+        }
+
+        private void OnDashMessage(PlayerDashMessage message) => HandleInterrupt();
+        private void OnJumpMessage(PlayerJumpMessage message) => HandleInterrupt();
+
+        private void HandleInterrupt()
+        {
+            if (!IsCancelWindowOpen) return;
+
+            var stateName = stateMachine.CurrentState?.StateName;
+            if (stateName == "PlayerAttackLight1State" || stateName == "PlayerAttackLight2State")
+            {
+                IsCancelWindowOpen = false;
+                inputBuffer.Clear();
+                EventBus.Publish(new EndCombatMessage());
+            }
         }
 
         public AttackDataSO GetLightAttackData(int comboIndex)

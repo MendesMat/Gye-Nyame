@@ -700,6 +700,7 @@ GameObject:
   - component: {fileID: 2085074047}
   - component: {fileID: 2085074048}
   - component: {fileID: 2085074049}
+  - component: {fileID: 2085074050}
   m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
@@ -817,6 +818,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Animation.PlayerAnimationHandler
   animator: {fileID: 2085074048}
   spriteRenderer: {fileID: 2085074047}
+--- !u!114 &2085074050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085074045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7bdf621ecf675e41aff02e376004a4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Player.Animation::GyeNyame.Player.Animation.PlayerAnimationEventHandler
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

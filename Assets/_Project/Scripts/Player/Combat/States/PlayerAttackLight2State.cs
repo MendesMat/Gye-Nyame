@@ -32,6 +32,7 @@ namespace GyeNyame.Player.Combat.States
 
             if (_combatContext.InputBuffer.HasCommand<PlayerAttackHeavyMessage>())
             {
+                _combatContext.InputBuffer.ConsumeCommand<PlayerAttackHeavyMessage>();
                 StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerAttackHeavyState>());
             }
         }

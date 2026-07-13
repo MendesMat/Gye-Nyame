@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Player.Combat::GyeNyame.Player.Combat.AttackDataSO
   damage: 1
   bufferTime: 0.2
-  hitStopTime: 0.1
+  hitStopTime: 0.05
   screenShakeMultiplier: 0
