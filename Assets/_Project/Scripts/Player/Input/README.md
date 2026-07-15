@@ -1,17 +1,41 @@
-# Módulo: Player Input
+# Módulo: Player Input (`GyeNyame.Player.Input`)
 
-Este módulo é responsável por capturar as ações físicas do jogador (teclado, mouse, gamepad) através do Unity Input System e traduzi-las em eventos para o restante do jogo.
+Este módulo é responsável pela camada mais externa de interação do jogador com o jogo. Ele intercepta as entradas de hardware (teclado, mouse, gamepad) através do Unity Input System e as converte em intenções de domínio, distribuídas por toda a arquitetura através do `EventBus`.
 
-## Fluxo de Funcionamento
+## Mecânicas e Funcionalidades
 
-1. **Captura de Input**: O script `PlayerInputHandler` ouve os eventos disparados pelo `PlayerInputActions` (gerado automaticamente pelo Unity Input System).
-2. **Conversão e Desacoplamento**: Em vez de invocar diretamente métodos no script de movimentação ou combate, o Input Handler converte os inputs brutos em mensagens estruturadas (estruturas localizadas em `Player/Movement/Messages`), como:
-   - `PlayerMoveMessage(Vector2)`
-   - `PlayerJumpMessage()`
-   - `PlayerDashMessage()`
-3. **Publicação (EventBus)**: Essas mensagens são disparadas utilizando o `EventBus` (fornecido pelo módulo `Core`).
+- **Mapeamento de Ações Básicas:** Captura de sinais de `Move`, `Jump`, `Dash`, `AttackLight` e `AttackHeavy`.
+- **Gerenciamento de Contexto:** Possui suporte para alternar mapas de ação (ex.: `SwitchToPlayerMode` e `SwitchToUIMode`), permitindo que a entrada do jogador seja roteada apenas para UI quando necessário (menus abertos, pausa).
+- **Tradução de Input para Mensagens:** Remove o acoplamento do Unity Input System do resto do jogo. O input cru é embalado em *Messages* específicas (`Core.Contracts.Messages`).
 
-## Interação com outros Módulos
-- **Depende de**: `Core` (para o EventBus) e `Movement` (para importar as estruturas de Mensagem).
-- **Consome**: Inputs diretamente do pacote Input System da Unity.
-- **Fornece**: Sinais de intenção de ação. Como ele apenas publica no `EventBus`, ele não possui conhecimento de *quem* vai realizar o pulo ou o movimento. Isso garante baixo acoplamento e facilita a criação de mocks para testes ou transições entre controle de jogador e controle de IA.
+## Como Usar
+
+1. O componente principal deste módulo é o `PlayerInputHandler`.
+2. Adicione-o a um GameObject (geralmente na raiz do Player).
+3. Certifique-se de que o arquivo `PlayerInputActions` (gerado pelo Unity Input System) exista e esteja acessível, pois o script o instancia no `Awake()`.
+4. Ele cuidará automaticamente da habilitação e desabilitação dos inputs em `OnEnable` e `OnDisable`.
+
+## Fluxo de Comunicação e Arquitetura
+
+Este módulo atua unicamente como um **Emissor (Publisher)** de informações. Ele não consome informações de jogabilidade, o que mantém sua responsabilidade puramente focada na captação de intenções.
+
+### De onde recebe informação?
+- **Unity Input System:** Recebe *callbacks* disparados quando o jogador pressiona ou solta um botão físico.
+
+### O que faz com a informação?
+- Avalia o contexto da ação (ex: lê um `Vector2` em `OnMovePerformed` ou entende `Vector2.zero` em `OnMoveCanceled`).
+- Empacota essa intenção dentro de structs concretas de Mensagem.
+
+### Para onde envia informação?
+- Envia a mensagem traduzida para o **Core** usando `EventBus.Publish(...)`.
+
+```mermaid
+flowchart TD
+    UIS(Unity Input System) -->|Callbacks| PIH(PlayerInputHandler)
+    PIH -->|Publish PlayerMoveMessage| EB{Core: EventBus}
+    PIH -->|Publish PlayerJumpMessage| EB
+    PIH -->|Publish PlayerDashMessage| EB
+    PIH -->|Publish PlayerAttackLightMessage| EB
+    PIH -->|Publish PlayerAttackHeavyMessage| EB
+    EB -->|Broadcast| Consumers((Módulos Consumidores\nMovement, Combat, etc.))
+```
