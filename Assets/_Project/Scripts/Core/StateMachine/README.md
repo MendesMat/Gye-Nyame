@@ -1,4 +1,4 @@
-# State Machine System
+# State Machine
 
 Este documento descreve o funcionamento e a arquitetura do sistema de máquina de estados (State Machine) localizado em `Assets/Scripts/Core/StateMachine`.
 

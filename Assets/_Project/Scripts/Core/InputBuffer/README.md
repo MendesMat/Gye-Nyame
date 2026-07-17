@@ -1,4 +1,4 @@
-# Sistema de Input Buffer
+# Input Buffer
 
 Este documento descreve o funcionamento e a arquitetura do sistema de buffer de entradas (Input Buffer) localizado em `Assets/_Project/Scripts/Core/InputBuffer`.
 

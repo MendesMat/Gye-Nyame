@@ -1,4 +1,4 @@
-# Sistema de Mensageria (Messaging System)
+# Mensageria
 
 Este sistema provê uma forma desacoplada de comunicação entre diferentes componentes do projeto, utilizando o padrão **Publisher/Subscriber (Pub/Sub)**. Isso permite que partes do código interajam sem precisar conhecer diretamente a existência uma da outra.
 
