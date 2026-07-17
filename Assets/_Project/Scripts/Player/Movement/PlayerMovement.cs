@@ -14,6 +14,7 @@ namespace GyeNyame.Player.Movement
         [Header("Components")]
         [SerializeField] private StateMachine stateMachine;
         [SerializeField] private Rigidbody rigidBody;
+        [SerializeField] private MonoBehaviour kinematicPhysicsComponent;
 
         [Header("Movement Properties")]
         [SerializeField] private float speed;
@@ -35,7 +36,7 @@ namespace GyeNyame.Player.Movement
         [Header("Cooldowns")]
         [SerializeField] private float jumpCooldown = 0.2f;
 
-        private float _groundYPosition;
+        private IKinematicPhysics _kinematicPhysics;
         private bool _isGrounded;
         private float _verticalVelocity;
         private Vector2 _currentMoveInput;
@@ -62,7 +63,14 @@ namespace GyeNyame.Player.Movement
         #region Lifecycle
         private void Awake()
         {
-            _groundYPosition = transform.position.y;
+            if(kinematicPhysicsComponent is not IKinematicPhysics physics)
+            {
+                Debug.LogError("kinematicPhysicsComponent does not implement IKinematicPhysics!");
+                return;
+            }
+            
+            _kinematicPhysics = physics;
+
             InitializeStateMachine();
         }
 
@@ -143,11 +151,14 @@ namespace GyeNyame.Player.Movement
 
         public void UpdateMovement(float speedMultiplier, bool lockDepth = false)
         {
-            var targetPosition = rigidBody.position;
+            var currentPosition = rigidBody.position;
 
             var depthInput = lockDepth ? 0f : _currentMoveInput.y;
-            var horizontalMovement = new Vector3(_currentMoveInput.x, 0f, depthInput * depthSpeedMultiplier) * speedMultiplier;
-            targetPosition += horizontalMovement * speed * Time.fixedDeltaTime;
+            var directionMovement = new Vector3(_currentMoveInput.x, 0f, depthInput * depthSpeedMultiplier) * speedMultiplier;
+            var intendedMovement = directionMovement * speed * Time.fixedDeltaTime;
+
+            var allowedMovement = _kinematicPhysics.CalculateAllowedMovement(currentPosition, intendedMovement);
+            var targetPosition = currentPosition + allowedMovement;
 
             targetPosition = ApplyVerticalMovement(targetPosition);
             rigidBody.MovePosition(targetPosition);
@@ -171,26 +182,38 @@ namespace GyeNyame.Player.Movement
             _isGrounded = false;
         }
 
-        private Vector3 ApplyVerticalMovement(Vector3 targetPosition)
+        private Vector3 ApplyVerticalMovement(Vector3 currentPosition)
         {
-            if (!_isGrounded) _verticalVelocity -= gravity * Time.fixedDeltaTime;
-            targetPosition.y += _verticalVelocity * Time.fixedDeltaTime;
+            if (!_isGrounded) 
+            {
+                _verticalVelocity -= gravity * Time.fixedDeltaTime;
+            }
+            
+            float intendedFall = _verticalVelocity * Time.fixedDeltaTime;
 
-            if (ShouldLand(targetPosition)) targetPosition = Land(targetPosition);
+            if (intendedFall < 0f)
+            {
+                float fallDistance = Mathf.Abs(intendedFall);
+                if (_kinematicPhysics.CheckGround(currentPosition, fallDistance, out float allowedFall))
+                {
+                    _verticalVelocity = 0f;
+                    _isGrounded = true;
+                    _lastLandTime = Time.time;
+                    currentPosition.y -= allowedFall;
+                    return currentPosition;
+                }
+            }
+            
+            else if (_isGrounded)
+            {
+                if (!_kinematicPhysics.CheckGround(currentPosition, 0.05f, out _))
+                {
+                    _isGrounded = false;
+                }
+            }
 
-            return targetPosition;
-        }
-
-        private bool ShouldLand(Vector3 targetPosition) =>
-            !_isGrounded && _verticalVelocity <= 0f && targetPosition.y <= _groundYPosition;
-
-        private Vector3 Land(Vector3 targetPosition)
-        {
-            _verticalVelocity = 0f;
-            _isGrounded = true;
-            _lastLandTime = Time.time;
-            targetPosition.y = _groundYPosition;
-            return targetPosition;
+            currentPosition.y += intendedFall;
+            return currentPosition;
         }
         #endregion
 
@@ -209,10 +232,13 @@ namespace GyeNyame.Player.Movement
 
         public void UpdateDirectionalMovement(Vector2 direction, float speedMultiplier)
         {
-            var targetPosition = rigidBody.position;
+            var currentPosition = rigidBody.position;
 
-            var horizontalMovement = new Vector3(direction.x, 0f, direction.y * depthSpeedMultiplier) * speedMultiplier;
-            targetPosition += horizontalMovement * speed * Time.fixedDeltaTime;
+            var directionMovement = new Vector3(direction.x, 0f, direction.y * depthSpeedMultiplier) * speedMultiplier;
+            var intendedMovement = directionMovement * speed * Time.fixedDeltaTime;
+
+            var allowedMovement = _kinematicPhysics.CalculateAllowedMovement(currentPosition, intendedMovement);
+            var targetPosition = currentPosition + allowedMovement;
 
             targetPosition = ApplyVerticalMovement(targetPosition);
             rigidBody.MovePosition(targetPosition);

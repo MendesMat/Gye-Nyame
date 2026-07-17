@@ -31,16 +31,10 @@ O módulo de Combate atua como **Consumidor** de comandos de Input e **Emissor**
 ### Para onde envia informação?
 - Dispara um `EndCombatMessage` via `EventBus` assim que um ataque é encerrado (seja por conclusão de animação ou cancelamento), avisando ao módulo de Movimento que é possível voltar a transitar livremente (Walk/Idle).
 
-```mermaid
-flowchart TD
-    EB{Core: EventBus} -->|PlayerAttackLightMessage\nPlayerAttackHeavyMessage| PC(PlayerCombat)
-    EB -->|AnimationCancelWindowMessage\nAnimationFinishAttackMessage| PC
-    
-    PC -->|Guarda no| IB[(InputBuffer)]
-    IB -->|Valida| PC
-    
-    PC -->|Lê Contexto| States((States:\nAttackLight1\nAttackLight2\nAttackHeavy))
-    States -->|Bloqueia Rosto| IPL[IPlayerLocomotion]
-    
-    PC -->|Publish EndCombatMessage| EB
-```
+- **EventBus** ➔ *PlayerAttackLightMessage / HeavyMessage* ➔ **PlayerCombat**
+- **EventBus** ➔ *AnimationCancelWindowMessage / FinishAttackMessage* ➔ **PlayerCombat**
+- **PlayerCombat** ➔ *Guarda no* ➔ **InputBuffer**
+- **InputBuffer** ➔ *Valida* ➔ **PlayerCombat**
+- **PlayerCombat** ➔ *Lê Contexto* ➔ **States (AttackLight1, AttackLight2, AttackHeavy)**
+- **States** ➔ *Bloqueia Rosto* ➔ **IPlayerLocomotion**
+- **PlayerCombat** ➔ *Publish EndCombatMessage* ➔ **EventBus**

@@ -30,14 +30,9 @@ O sistema atua como **Consumidor** primário das intenções de movimento.
 ### Para onde envia informação?
 - Ele não envia muitas informações diretas via `EventBus`. Sua comunicação de saída acontece, principalmente, provendo variáveis acessíveis através de interfaces como `IPlayerLocomotion` (consumidas, por exemplo, pela animação para virar o sprite) e pelas trocas de estado (A `StateMachine` dispara o evento `OnStateChanged`, alertando a animação para mudar os clipes).
 
-```mermaid
-flowchart TD
-    EB{Core: EventBus} -->|PlayerMoveMessage\nPlayerJumpMessage\nPlayerDashMessage| PM(PlayerMovement)
-    EB -->|EndCombatMessage| PM
-    
-    PM -->|Lê Contexto| States((States:\nIdle\nWalk\nJump\nDash))
-    States -->|Atualiza Física| RB[(Rigidbody)]
-    
-    PM -.->|Implementa| IPL[IPlayerLocomotion]
-    IPL -.->|É lida por| PA(PlayerAnimationHandler)
-```
+- **EventBus** ➔ *Move/Jump/Dash Messages* ➔ **PlayerMovement**
+- **EventBus** ➔ *EndCombatMessage* ➔ **PlayerMovement**
+- **PlayerMovement** ➔ *Lê Contexto* ➔ **States (Idle, Walk, Jump, Dash)**
+- **States** ➔ *Atualiza Física* ➔ **Rigidbody**
+- **PlayerMovement** ➔ *Implementa* ➔ **IPlayerLocomotion**
+- **IPlayerLocomotion** ➔ *É lida por* ➔ **PlayerAnimationHandler**

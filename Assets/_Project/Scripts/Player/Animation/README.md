@@ -33,14 +33,9 @@ Trabalha de forma bidirecional e fracamente acoplada. É reativo em relação ao
     - `EventBus.Publish(new AnimationFinishAttackMessage())`
 - Tais sinais vão ser engolidos principalmente pelo `PlayerCombat` e afins para orquestrar as *StateMachines* dependentes de tempo visual.
 
-```mermaid
-flowchart TD
-    SM{StateMachine} -->|OnStateChanged (C# Event)| PAH(PlayerAnimationHandler)
-    IPL[IPlayerLocomotion] -.->|Provê X Direction| PAH
-    
-    PAH -->|Play(Hash) & FlipX| VISUAL[(Animator & SpriteRenderer)]
-    
-    VISUAL -->|Animation Events\n(Via Timeline)| PAEH(PlayerAnimationEventHandler)
-    PAEH -->|Publish AnimationCancelWindowMessage| EB{Core: EventBus}
-    PAEH -->|Publish AnimationFinishAttackMessage| EB
-```
+- **StateMachine** ➔ *OnStateChanged (C# Event)* ➔ **PlayerAnimationHandler**
+- **IPlayerLocomotion** ➔ *Provê X Direction* ➔ **PlayerAnimationHandler**
+- **PlayerAnimationHandler** ➔ *Play(Hash) & FlipX* ➔ **Visual (Animator & SpriteRenderer)**
+- **Visual** ➔ *Animation Events (Timeline)* ➔ **PlayerAnimationEventHandler**
+- **PlayerAnimationEventHandler** ➔ *Publish AnimationCancelWindowMessage* ➔ **EventBus**
+- **PlayerAnimationEventHandler** ➔ *Publish AnimationFinishAttackMessage* ➔ **EventBus**

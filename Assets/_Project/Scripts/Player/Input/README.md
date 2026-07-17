@@ -29,13 +29,6 @@ Este módulo atua unicamente como um **Emissor (Publisher)** de informações. E
 ### Para onde envia informação?
 - Envia a mensagem traduzida para o **Core** usando `EventBus.Publish(...)`.
 
-```mermaid
-flowchart TD
-    UIS(Unity Input System) -->|Callbacks| PIH(PlayerInputHandler)
-    PIH -->|Publish PlayerMoveMessage| EB{Core: EventBus}
-    PIH -->|Publish PlayerJumpMessage| EB
-    PIH -->|Publish PlayerDashMessage| EB
-    PIH -->|Publish PlayerAttackLightMessage| EB
-    PIH -->|Publish PlayerAttackHeavyMessage| EB
-    EB -->|Broadcast| Consumers((Módulos Consumidores\nMovement, Combat, etc.))
-```
+- **Unity Input System** ➔ *Callbacks* ➔ **PlayerInputHandler**
+- **PlayerInputHandler** ➔ *Publish Move/Jump/Dash/Attack Messages* ➔ **EventBus**
+- **EventBus** ➔ *Broadcast* ➔ **Módulos Consumidores (Movement, Combat, etc.)**
