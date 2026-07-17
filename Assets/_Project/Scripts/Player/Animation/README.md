@@ -11,7 +11,7 @@ Este módulo é o elo visual. Ele traduz os estados lógicos (da máquina de est
 ## Como Usar
 
 1. No GameObject, anexe o `PlayerAnimationHandler` (e `PlayerAnimationEventHandler` caso os eventos já tenham sido separados).
-2. É obrigatório ter um `Animator` (com os *States* configurados e nomeados com o mesmo nome que consta no *Script* — Ex: `"Walk"`, `"Jump"`) e um `SpriteRenderer`.
+2. É obrigatório ter um `Animator` (com os *States* configurados e nomeados com o mesmo nome que consta no *Script* — Ex: `"Walk"`, `"Jump"`, `"Fall"`) e um `SpriteRenderer`.
 3. O componente deve estar no mesmo *GameObject* (ou ser filho direto) onde repousa a `StateMachine` e os scripts que implementam `IPlayerLocomotion` (Geralmente o script de *Movement*).
 
 ## Fluxo de Comunicação e Arquitetura

@@ -6,6 +6,7 @@ Este módulo é o coração da física e locomoção do jogador. Ele traduz inte
 
 - **Movimento Horizontal e Profundidade:** Lê os inputs `X` e `Y` e aplica velocidade respeitando as regras do jogo.
 - **Salto (Jump):** Lógica que lida com a gravidade de forma customizada (`_verticalVelocity`), aplicando uma força impulsiva e reduzindo-a gradativamente em cada `FixedUpdate` (simulando gravidade própria em ambiente isométrico ou pseudo-3D dependendo da câmera).
+- **Queda (Fall):** Acionado automaticamente quando o jogador atinge o ápice de um salto ou caminha para fora de uma beirada, aplicando a gravidade de descida e isolando a animação de queda da de pulo.
 - **Dash Direcional:** Uma esquiva rápida para o lado em que o jogador aponta ou se movimenta, controlada via transição de estado na `StateMachine`.
 - **Controle de Rosto (Facing Direction):** Identifica para qual lado o jogador está virado e permite o travamento dessa direção (útil quando atacando).
 
@@ -24,7 +25,7 @@ O sistema atua como **Consumidor** primário das intenções de movimento.
 
 ### O que faz com a informação?
 - Armazena as intenções em *flags* internas ou guarda a direção (`_currentMoveInput`, `_jumpRequested`, `_dashRequested`).
-- A `StateMachine` que gerencia este módulo itera pelos estados (`PlayerIdleState`, `PlayerWalkState`, etc.), lendo essas variáveis através da interface de contexto `IPlayerMovementContext`.
+- A `StateMachine` que gerencia este módulo itera pelos estados (`PlayerIdleState`, `PlayerWalkState`, `PlayerFallState`, etc.), lendo essas variáveis através da interface de contexto `IPlayerMovementContext`.
 - Dependendo do estado, altera transformações ou velocidades físicas.
 
 ### Para onde envia informação?
@@ -34,7 +35,7 @@ O sistema atua como **Consumidor** primário das intenções de movimento.
 
 - **EventBus** ➔ *Move/Jump/Dash Messages* ➔ **PlayerMovement**
 - **EventBus** ➔ *EndCombatMessage* ➔ **PlayerMovement**
-- **PlayerMovement** ➔ *Lê Contexto* ➔ **States (Idle, Walk, Jump, Dash)**
+- **PlayerMovement** ➔ *Lê Contexto* ➔ **States (Idle, Walk, Jump, Fall, Dash)**
 - **States** ➔ *Atualiza Física* ➔ **Rigidbody**
 - **PlayerMovement** ➔ *Implementa* ➔ **IPlayerLocomotion**
 - **IPlayerLocomotion** ➔ *É lida por* ➔ **PlayerAnimationHandler**
