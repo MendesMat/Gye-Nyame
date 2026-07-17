@@ -15,6 +15,11 @@ namespace GyeNyame.Player.Movement.States
         {
             _context.UpdateMovement(speedMultiplier: 0f, lockDepth: false);
 
+            if (_context.HasMoveInput)
+            {
+                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerWalkState>());
+            }
+
             if (_context.ConsumeDashRequest())
             {
                 StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerDashState>());
@@ -27,9 +32,10 @@ namespace GyeNyame.Player.Movement.States
                 return;
             }
 
-            if (_context.HasMoveInput)
+            if (!_context.IsGrounded)
             {
-                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerWalkState>());
+                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerFallState>());
+                return;
             }
         }
     }

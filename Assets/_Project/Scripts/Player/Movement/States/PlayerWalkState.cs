@@ -15,6 +15,12 @@ namespace GyeNyame.Player.Movement.States
         {
             _context.UpdateMovement(speedMultiplier: 1f, lockDepth: false);
 
+            if (!_context.IsGrounded)
+            {
+                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerFallState>());
+                return;
+            }
+
             if (_context.ConsumeDashRequest())
             {
                 StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerDashState>());

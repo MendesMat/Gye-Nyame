@@ -23,17 +23,13 @@ namespace GyeNyame.Player.Movement.States
                 lockDepth: _context.LockDepthDuringJump
             );
 
+            // Consome a intenção de dash para não enfileirar no ar (sem transição, ignorando a ação)
             _context.ConsumeDashRequest();
 
-            if (!_context.IsGrounded) return;
-
-            if (_context.HasMoveInput)
+            if (_context.VerticalVelocity <= 0f)
             {
-                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerWalkState>());
-                return;
+                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerFallState>());
             }
-
-            StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerIdleState>());
         }
     }
 }

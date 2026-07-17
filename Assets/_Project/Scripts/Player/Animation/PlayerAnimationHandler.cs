@@ -26,6 +26,7 @@ namespace GyeNyame.Player.Animation
         private const string StateIdle = "PlayerIdleState";
         private const string StateWalk = "PlayerWalkState";
         private const string StateJump = "PlayerJumpState";
+        private const string StateFall = "PlayerFallState";
         private const string StateDash = "PlayerDashState";
         private const string StateAttackLight1 = "PlayerAttackLight1State";
         private const string StateAttackLight2 = "PlayerAttackLight2State";
@@ -34,6 +35,7 @@ namespace GyeNyame.Player.Animation
         private static readonly int IdleHash = Animator.StringToHash("Idle");
         private static readonly int WalkHash = Animator.StringToHash("Walk");
         private static readonly int JumpHash = Animator.StringToHash("Jump");
+        private static readonly int FallHash = Animator.StringToHash("Fall");
         private static readonly int DashHash = Animator.StringToHash("Dash");
         private static readonly int AttackLight1Hash = Animator.StringToHash("AttackLight1");
         private static readonly int AttackLight2Hash = Animator.StringToHash("AttackLight2");
@@ -85,6 +87,7 @@ namespace GyeNyame.Player.Animation
             _stateToHash[StateIdle] = IdleHash;
             _stateToHash[StateWalk] = WalkHash;
             _stateToHash[StateJump] = JumpHash;
+            _stateToHash[StateFall] = FallHash;
             _stateToHash[StateDash] = DashHash;
             _stateToHash[StateAttackLight1] = AttackLight1Hash;
             _stateToHash[StateAttackLight2] = AttackLight2Hash;

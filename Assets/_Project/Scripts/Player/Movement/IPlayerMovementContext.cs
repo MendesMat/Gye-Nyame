@@ -9,6 +9,7 @@ namespace GyeNyame.Player.Movement
         Vector2 CurrentMoveInput { get; }
         Vector2 FacingDirection { get; }
         float FacingDirectionX { get; }
+        float VerticalVelocity { get; }
 
         float AirSpeedMultiplier { get; }
         bool LockDepthDuringJump { get; }

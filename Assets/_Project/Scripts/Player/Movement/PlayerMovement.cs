@@ -54,6 +54,7 @@ namespace GyeNyame.Player.Movement
         public Vector2 CurrentMoveInput => _currentMoveInput;
         public Vector2 FacingDirection => _facingDirection;
         public float FacingDirectionX => _facingDirectionX;
+        public float VerticalVelocity => _verticalVelocity;
 
         public float AirSpeedMultiplier => airSpeedMultiplier;
         public bool LockDepthDuringJump => lockDepthDuringJump;
@@ -100,6 +101,7 @@ namespace GyeNyame.Player.Movement
             stateMachine.RegisterState<PlayerIdleState>(new StateFactory<PlayerIdleState>(sm => new PlayerIdleState(sm, this)));
             stateMachine.RegisterState<PlayerWalkState>(new StateFactory<PlayerWalkState>(sm => new PlayerWalkState(sm, this)));
             stateMachine.RegisterState<PlayerJumpState>(new StateFactory<PlayerJumpState>(sm => new PlayerJumpState(sm, this)));
+            stateMachine.RegisterState<PlayerFallState>(new StateFactory<PlayerFallState>(sm => new PlayerFallState(sm, this)));
             stateMachine.RegisterState<PlayerDashState>(new StateFactory<PlayerDashState>(sm => new PlayerDashState(sm, this)));
         }
         #endregion
