@@ -31,6 +31,8 @@ O módulo de Combate atua como **Consumidor** de comandos de Input e **Emissor**
 ### Para onde envia informação?
 - Dispara um `EndCombatMessage` via `EventBus` assim que um ataque é encerrado (seja por conclusão de animação ou cancelamento), avisando ao módulo de Movimento que é possível voltar a transitar livremente (Walk/Idle).
 
+---
+
 - **EventBus** ➔ *PlayerAttackLightMessage / HeavyMessage* ➔ **PlayerCombat**
 - **EventBus** ➔ *AnimationCancelWindowMessage / FinishAttackMessage* ➔ **PlayerCombat**
 - **PlayerCombat** ➔ *Guarda no* ➔ **InputBuffer**

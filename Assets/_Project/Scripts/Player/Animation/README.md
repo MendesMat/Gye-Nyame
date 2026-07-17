@@ -33,6 +33,8 @@ Trabalha de forma bidirecional e fracamente acoplada. É reativo em relação ao
     - `EventBus.Publish(new AnimationFinishAttackMessage())`
 - Tais sinais vão ser engolidos principalmente pelo `PlayerCombat` e afins para orquestrar as *StateMachines* dependentes de tempo visual.
 
+---
+
 - **StateMachine** ➔ *OnStateChanged (C# Event)* ➔ **PlayerAnimationHandler**
 - **IPlayerLocomotion** ➔ *Provê X Direction* ➔ **PlayerAnimationHandler**
 - **PlayerAnimationHandler** ➔ *Play(Hash) & FlipX* ➔ **Visual (Animator & SpriteRenderer)**

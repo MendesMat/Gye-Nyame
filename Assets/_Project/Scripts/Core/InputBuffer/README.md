@@ -51,39 +51,35 @@ Para usar este sistema de modo eficiente, o fluxo comum envolve injetar ações 
 ### Adicionando comandos ao Buffer
 Isso normalmente ocorre quando a classe ouve o input bruto (via EventBus):
 
-```csharp
-public class PlayerCombat : MonoBehaviour {
-    public InputBuffer inputBuffer; // Referência no Inspector
-    public float attackBufferTime = 0.2f; // Janela de 200ms
-
-    void OnEnable() {
-        EventBus.Subscribe<PlayerAttackLightMessage>(OnAttackLight);
-    }
-
-    void OnAttackLight(PlayerAttackLightMessage msg) {
-        // Guarda o comando com uma janela de tempo de 0.2s
-        inputBuffer.BufferCommand<PlayerAttackLightMessage>(attackBufferTime);
-    }
-}
-```
+> `public class PlayerCombat : MonoBehaviour {`
+> `    public InputBuffer inputBuffer; // Referência no Inspector`
+> `    public float attackBufferTime = 0.2f; // Janela de 200ms`
+> ` `
+> `    void OnEnable() {`
+> `        EventBus.Subscribe<PlayerAttackLightMessage>(OnAttackLight);`
+> `    }`
+> ` `
+> `    void OnAttackLight(PlayerAttackLightMessage msg) {`
+> `        // Guarda o comando com uma janela de tempo de 0.2s`
+> `        inputBuffer.BufferCommand<PlayerAttackLightMessage>(attackBufferTime);`
+> `    }`
+> `}`
 
 ### Checando e Consumindo comandos
 Geralmente ocorre no `Update` da State Machine que pode usar essa ação:
 
-```csharp
-void Update() {
-    // Só checamos se estamos em um estado onde podemos atacar (ex: Idle/Walk)
-    if (CurrentState is PlayerIdleState || CurrentState is PlayerWalkState) {
-        
-        // Pergunta: O jogador pediu pra atacar recentemente?
-        if (inputBuffer.HasCommand<PlayerAttackLightMessage>()) {
-            
-            // Consome o comando para ele sumir da fila
-            inputBuffer.ConsumeCommand<PlayerAttackLightMessage>();
-            
-            // Executa a ação
-            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerAttackLightState>());
-        }
-    }
-}
-```
+> `void Update() {`
+> `    // Só checamos se estamos em um estado onde podemos atacar (ex: Idle/Walk)`
+> `    if (CurrentState is PlayerIdleState || CurrentState is PlayerWalkState) {`
+> `        `
+> `        // Pergunta: O jogador pediu pra atacar recentemente?`
+> `        if (inputBuffer.HasCommand<PlayerAttackLightMessage>()) {`
+> `            `
+> `            // Consome o comando para ele sumir da fila`
+> `            inputBuffer.ConsumeCommand<PlayerAttackLightMessage>();`
+> `            `
+> `            // Executa a ação`
+> `            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerAttackLightState>());`
+> `        }`
+> `    }`
+> `}`

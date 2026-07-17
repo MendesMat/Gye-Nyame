@@ -29,6 +29,8 @@ Este módulo atua unicamente como um **Emissor (Publisher)** de informações. E
 ### Para onde envia informação?
 - Envia a mensagem traduzida para o **Core** usando `EventBus.Publish(...)`.
 
+---
+
 - **Unity Input System** ➔ *Callbacks* ➔ **PlayerInputHandler**
 - **PlayerInputHandler** ➔ *Publish Move/Jump/Dash/Attack Messages* ➔ **EventBus**
 - **EventBus** ➔ *Broadcast* ➔ **Módulos Consumidores (Movement, Combat, etc.)**

@@ -61,10 +61,6 @@ O funcionamento da State Machine segue uma lógica de registro, criação sob de
 
 1.  Crie uma nova classe herdando de `BaseState`.
 2.  No `StateController` (ou classe equivalente), registre a fábrica para esse novo tipo no método `RegisterFactories()`:
-    ```csharp
-    stateMachine.RegisterState<MeuNovoEstado>(new StateFactory<MeuNovoEstado>());
-    ```
+    > `stateMachine.RegisterState<MeuNovoEstado>(new StateFactory<MeuNovoEstado>());`
 3.  Solicite a mudança para o novo estado quando necessário:
-    ```csharp
-    stateMachine.ChangeState(stateMachine.GetOrCreateState<MeuNovoEstado>());
-    ```
+    > `stateMachine.ChangeState(stateMachine.GetOrCreateState<MeuNovoEstado>());`

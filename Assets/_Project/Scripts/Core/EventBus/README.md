@@ -38,28 +38,22 @@ Define-se uma estrutura de dados que implementa `IMessage`. Ela deve conter toda
 
 ### 2. Contratação (Subscribe)
 Um componente interessado (Ouvinte) se registra no `MessageBroker`. Geralmente isso é feito no `OnEnable` (Unity).
-```csharp
-void OnEnable() {
-    MessageBroker.Subscribe<StateChangedMessage>(MinhaFuncaoDeResposta);
-}
-```
+> `void OnEnable() {`
+> `    MessageBroker.Subscribe<StateChangedMessage>(MinhaFuncaoDeResposta);`
+> `}`
 
 ### 3. Gatilho (Publish)
 Um evento acontece no jogo e o componente responsável (Emissor) "grita" para o sistema que algo mudou, sem saber quem está ouvindo.
-```csharp
-MessageBroker.Publish(new StateChangedMessage(estadoAntigo, novoEstado));
-```
+> `MessageBroker.Publish(new StateChangedMessage(estadoAntigo, novoEstado));`
 
 ### 4. Reação
 O `MessageBroker` recebe a mensagem e a entrega imediatamente para todos que fizeram o "Subscribe" anteriormente, executando suas respectivas funções.
 
 ### 5. Finalização (Unsubscribe)
 O ouvinte deve sempre se remover do registro quando não for mais necessário (geralmente no `OnDisable` ou `OnDestroy`).
-```csharp
-void OnDisable() {
-    MessageBroker.Unsubscribe<StateChangedMessage>(MinhaFuncaoDeResposta);
-}
-```
+> `void OnDisable() {`
+> `    MessageBroker.Unsubscribe<StateChangedMessage>(MinhaFuncaoDeResposta);`
+> `}`
 
 ---
 

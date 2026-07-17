@@ -30,6 +30,8 @@ O sistema atua como **Consumidor** primário das intenções de movimento.
 ### Para onde envia informação?
 - Ele não envia muitas informações diretas via `EventBus`. Sua comunicação de saída acontece, principalmente, provendo variáveis acessíveis através de interfaces como `IPlayerLocomotion` (consumidas, por exemplo, pela animação para virar o sprite) e pelas trocas de estado (A `StateMachine` dispara o evento `OnStateChanged`, alertando a animação para mudar os clipes).
 
+---
+
 - **EventBus** ➔ *Move/Jump/Dash Messages* ➔ **PlayerMovement**
 - **EventBus** ➔ *EndCombatMessage* ➔ **PlayerMovement**
 - **PlayerMovement** ➔ *Lê Contexto* ➔ **States (Idle, Walk, Jump, Dash)**

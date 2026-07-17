@@ -30,6 +30,8 @@ O sistema atua como um **Prestador de Serviço/Dependência** puramente calculis
 ### Para onde envia informação?
 - Retorna variáveis processadas de volta imediatamente para a classe chamadora, dizendo exatamente qual é o novo vetor reduzido permitido para a movimentação ou a distância de queda máxima.
 
+---
+
 - **PlayerMovement** ➔ *Injeta Dependência / Passa Intenção* ➔ **KinematicPhysics**
 - **KinematicPhysics** ➔ *SweepTest / SphereCast* ➔ **Unity Backend (Physics System)**
 - **Unity Backend** ➔ *Retorna Colisões* ➔ **KinematicPhysics**
