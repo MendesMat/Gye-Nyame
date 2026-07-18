@@ -13,6 +13,7 @@ namespace GyeNyame.Agents.Combat.States
         protected Vector3 targetPosition;
         
         protected readonly IEntityLocomotion locomotionContext;
+        public override EntityStateCategory StateCategory => EntityStateCategory.Hurt;
 
         public EntityHurtState(IStateMachine stateMachine, IEntityLocomotion locomotionContext) 
             : base(stateMachine)
@@ -33,8 +34,10 @@ namespace GyeNyame.Agents.Combat.States
             locomotionContext?.SetFacingDirectionLock(true);
             
             if (locomotionContext == null) return;
+
             Vector3 knockbackDirection = (targetPosition - currentDamage.SourcePosition).normalized;
             knockbackDirection.y = 0;
+            
             locomotionContext.ApplyExternalForce(knockbackDirection, currentDamage.KnockbackForce, currentDamage.KnockupForce);
         }
 
@@ -42,7 +45,15 @@ namespace GyeNyame.Agents.Combat.States
         {
             timer -= Time.deltaTime;
 
-            if (timer <= 0f) locomotionContext?.ReturnToIdle();
+            if (timer > 0f) return;
+            if (currentDamage.KnockupForce > 0f && locomotionContext != null && !locomotionContext.IsGrounded) return;
+            
+            TransitionToIdle();
+        }
+
+        protected virtual void TransitionToIdle()
+        {
+            StateMachine.ChangeState(StateMachine.GetOrCreateState<Movement.States.EntityIdleState>());
         }
 
         public override void FixedUpdate() => locomotionContext?.UpdateMovement(0f, false);

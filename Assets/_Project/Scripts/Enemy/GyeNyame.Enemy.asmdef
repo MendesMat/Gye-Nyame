@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "GyeNyame.Core",
-        "GyeNyame.Combat"
+        "GyeNyame.Combat",
+        "GyeNyame.Agents"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -10,5 +10,6 @@ namespace GyeNyame.Player.Combat
         
         AttackDataSO GetLightAttackData(int comboIndex);
         AttackDataSO GetHeavyAttackData();
+        void CloseCancelWindow();
     }
 }

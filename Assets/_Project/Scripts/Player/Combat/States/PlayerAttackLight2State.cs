@@ -4,42 +4,28 @@ using GyeNyame.Core.Contracts.Messages;
 
 namespace GyeNyame.Player.Combat.States
 {
-    public class PlayerAttackLight2State : BaseState
+    public class PlayerAttackLight2State : BasePlayerAttackState
     {
-        private readonly IPlayerCombatContext _combatContext;
-        private readonly Core.Contracts.Interfaces.IEntityLocomotion _locomotionContext;
+        public override EntityStateCategory StateCategory => EntityStateCategory.AttackLight2;
 
         public PlayerAttackLight2State(IStateMachine stateMachine, IPlayerCombatContext combatContext, IEntityLocomotion locomotionContext) 
-        : base(stateMachine)
+            : base(stateMachine, combatContext, locomotionContext)
         {
-            _combatContext = combatContext;
-            _locomotionContext = locomotionContext;
         }
 
         public override void Enter()
         {
-            _locomotionContext?.SetFacingDirectionLock(true);
-            _combatContext.InputBuffer.ConsumeCommand<PlayerAttackLightMessage>();
-        }
-
-        public override void FixedUpdate()
-        {
-            _locomotionContext?.UpdateMovement(0f, false);
-        }
-
-        public override void Exit()
-        {
-            base.Exit();
-            _locomotionContext?.SetFacingDirectionLock(false);
+            base.Enter();
+            combatContext.InputBuffer.ConsumeCommand<PlayerAttackLightMessage>();
         }
 
         public override void Update()
         {
-            if (!_combatContext.IsCancelWindowOpen) return;
+            if (!combatContext.IsCancelWindowOpen) return;
 
-            if (_combatContext.InputBuffer.HasCommand<PlayerAttackHeavyMessage>())
+            if (combatContext.InputBuffer.HasCommand<PlayerAttackHeavyMessage>())
             {
-                _combatContext.InputBuffer.ConsumeCommand<PlayerAttackHeavyMessage>();
+                combatContext.InputBuffer.ConsumeCommand<PlayerAttackHeavyMessage>();
                 StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerAttackHeavyState>());
             }
         }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using GyeNyame.Core.InputBuffer;
 using GyeNyame.Core.Contracts.Messages;
 using GyeNyame.Core.Contracts.Interfaces;
@@ -100,9 +100,10 @@ namespace GyeNyame.Player.Combat
 
         public void FinishAttack()
         {
-            IsCancelWindowOpen = false;
-            inputBuffer.Clear();
-            EventBus.Publish(new EndCombatMessage());
+            if (stateMachine.CurrentState is BasePlayerAttackState attackState)
+            {
+                attackState.OnAnimationFinish();
+            }
         }
 
         private void OnDashMessage(PlayerDashMessage message) => HandleInterrupt();
@@ -112,8 +113,7 @@ namespace GyeNyame.Player.Combat
         {
             if (!IsCancelWindowOpen) return;
 
-            var stateName = stateMachine.CurrentState?.StateName;
-            if (stateName == "PlayerAttackLight1State" || stateName == "PlayerAttackLight2State")
+            if (stateMachine.CurrentState is BasePlayerAttackState attackState && attackState.AllowInterrupt)
             {
                 IsCancelWindowOpen = false;
                 inputBuffer.Clear();

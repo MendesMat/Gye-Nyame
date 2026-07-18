@@ -5,6 +5,7 @@ namespace GyeNyame.Player.Movement.States
     public class PlayerJumpState : BaseState
     {
         private readonly IPlayerMovementContext _context;
+        public override EntityStateCategory StateCategory => EntityStateCategory.Jump;
 
         public PlayerJumpState(IStateMachine stateMachine, IPlayerMovementContext context) : base(stateMachine)
         {
@@ -23,7 +24,6 @@ namespace GyeNyame.Player.Movement.States
                 lockDepth: _context.LockDepthDuringJump
             );
 
-            // Consome a intenção de dash para não enfileirar no ar (sem transição, ignorando a ação)
             _context.ConsumeDashRequest();
 
             if (_context.VerticalVelocity <= 0f)

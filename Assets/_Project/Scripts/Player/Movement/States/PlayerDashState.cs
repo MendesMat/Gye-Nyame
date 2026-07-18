@@ -6,6 +6,7 @@ namespace GyeNyame.Player.Movement.States
     public class PlayerDashState : BaseState
     {
         private readonly IPlayerMovementContext _context;
+        public override EntityStateCategory StateCategory => EntityStateCategory.Dash;
 
         private Vector2 _dashDirection;
         private float _dashStartTime;

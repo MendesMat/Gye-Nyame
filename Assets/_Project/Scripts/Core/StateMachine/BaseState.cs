@@ -8,6 +8,7 @@ namespace GyeNyame.Core.StateMachine
         public event Action<BaseState> OnStateExit;
         
         public virtual string StateName => GetType().Name;
+        public virtual EntityStateCategory StateCategory => EntityStateCategory.None;
 
         protected BaseState(IStateMachine stateMachine)
         {

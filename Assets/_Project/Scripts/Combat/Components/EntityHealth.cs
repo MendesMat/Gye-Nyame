@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using GyeNyame.Core.Contracts.Data;
 using GyeNyame.Core.Contracts.Interfaces;
@@ -41,10 +41,7 @@ namespace GyeNyame.Combat.Components
             Die();
         }
 
-        protected virtual void OnDamageReceived(DamageData data)
-        {
-            Debug.Log($"{gameObject.name} received {data.Amount} damage. Health: {currentHealth}/{maxHealth}");
-        }
+        protected virtual void OnDamageReceived(DamageData data) { }
 
         protected virtual void Die()
         {

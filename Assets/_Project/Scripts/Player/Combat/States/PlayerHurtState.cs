@@ -2,6 +2,7 @@ using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.InputBuffer;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Agents.Combat.States;
+using GyeNyame.Player.Movement.States;
 
 namespace GyeNyame.Player.Combat.States
 {
@@ -19,6 +20,11 @@ namespace GyeNyame.Player.Combat.States
         {
             base.Enter();
             _inputBuffer?.Clear();
+        }
+
+        protected override void TransitionToIdle()
+        {
+            StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerIdleState>());
         }
     }
 }

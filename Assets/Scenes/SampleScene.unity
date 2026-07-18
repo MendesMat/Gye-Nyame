@@ -629,7 +629,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 1.1, y: 1, z: 0.5}
+  m_Size: {x: 1.1, y: 1, z: 2}
   m_Center: {x: 0.4, y: 0.05, z: 0}
 --- !u!114 &509027198
 MonoBehaviour:
@@ -760,7 +760,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 1.3, y: 1, z: 0.5}
+  m_Size: {x: 1.3, y: 1, z: 2}
   m_Center: {x: 0.55, y: 0.05, z: 0}
 --- !u!1 &1051977703
 GameObject:
@@ -861,7 +861,7 @@ GameObject:
   - component: {fileID: 1082542553}
   - component: {fileID: 1082542547}
   - component: {fileID: 1082542551}
-  - component: {fileID: 1082542555}
+  - component: {fileID: 1082542554}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -924,13 +924,14 @@ MonoBehaviour:
   speed: 5
   depthSpeedMultiplier: 2.5
   gravity: 25
+  knockbackDeceleration: 15
   jumpForce: 10
+  jumpCooldown: 0.2
   airSpeedMultiplier: 0.5
   lockDepthDuringJump: 1
   dashSpeedMultiplier: 3
   dashDuration: 0.2
   dashCooldown: 1
-  jumpCooldown: 0.2
 --- !u!54 &1082542548
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1031,7 +1032,7 @@ MonoBehaviour:
   groundCheckRadius: 0.1
   groundCheckOffset: {x: 0, y: -0.9, z: 0}
   skinWidth: 0.01
---- !u!114 &1082542555
+--- !u!114 &1082542554
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1040,10 +1041,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1082542542}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2225783902bc9c4e8cc84d1c092d07c, type: 3}
+  m_Script: {fileID: 11500000, guid: b565a54e614ea8a4db94b0ec666049bc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Stats.PlayerHealth
-  maxHealth: 100
+  m_EditorClassIdentifier: GyeNyame.Core::GyeNyame.Core.StateMachine.StateMachineDebugger
+  showLogs: 1
   _stateMachine: {fileID: 1082542550}
 --- !u!1 &1284654817
 GameObject:
@@ -1056,8 +1057,11 @@ GameObject:
   - component: {fileID: 1284654821}
   - component: {fileID: 1284654818}
   - component: {fileID: 1284654824}
+  - component: {fileID: 1284654825}
   - component: {fileID: 1284654823}
   - component: {fileID: 1284654822}
+  - component: {fileID: 1284654826}
+  - component: {fileID: 1284654827}
   m_Layer: 6
   m_Name: DummyDoll
   m_TagString: Untagged
@@ -1115,8 +1119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dddb42f74229d34ebfe1337291cb5b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GyeNyame.Enemy::GyeNyame.Enemy.Dummy.DummyDoll
-  gravity: 25
-  knockbackDeceleration: 5
+  stateMachine: {fileID: 1284654825}
 --- !u!114 &1284654823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1163,6 +1166,50 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1284654825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284654817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dbc4f4a63f1b7b45b663b7a2a36ccfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Core::GyeNyame.Core.StateMachine.StateMachine
+--- !u!114 &1284654826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284654817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90e6a750257ba9d4286cd24633ab53c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Enemy::GyeNyame.Enemy.Movement.EnemyMovement
+  stateMachine: {fileID: 1284654825}
+  rigidBody: {fileID: 1284654824}
+  speed: 5
+  depthSpeedMultiplier: 0.5
+  gravity: 25
+  knockbackDeceleration: 15
+--- !u!114 &1284654827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284654817}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b565a54e614ea8a4db94b0ec666049bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Core::GyeNyame.Core.StateMachine.StateMachineDebugger
+  showLogs: 1
+  _stateMachine: {fileID: 1284654825}
 --- !u!1 &1320016223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1217,7 +1264,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1503992885}
   - component: {fileID: 1503992886}
+  - component: {fileID: 1503992888}
   - component: {fileID: 1503992887}
+  - component: {fileID: 1503992889}
   m_Layer: 6
   m_Name: Visuals
   m_TagString: Untagged
@@ -1313,6 +1362,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Visuals.DamageFlashFeedback
   spriteRenderer: {fileID: 1503992886}
   flashMaterial: {fileID: 2100000, guid: e74d79cfaa9072b49842d9752bf36f9b, type: 2}
+--- !u!95 &1503992888
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503992884}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: e89d6e727a92d3e44b5bf7b7e7b1a654, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1503992889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503992884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8952612c2697fe04db6b19f655484602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Agents::GyeNyame.Agents.Animation.EntityAnimationHandler
+  animator: {fileID: 1503992888}
+  spriteRenderer: {fileID: 1503992886}
 --- !u!1 &1774752702
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,7 +1450,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 3
-  m_Size: {x: 1.3, y: 1, z: 0.5}
+  m_Size: {x: 1.3, y: 1, z: 2}
   m_Center: {x: 0.55, y: 0.05, z: 0}
 --- !u!114 &1774752705
 MonoBehaviour:
@@ -1650,7 +1735,7 @@ GameObject:
   - component: {fileID: 2085074046}
   - component: {fileID: 2085074047}
   - component: {fileID: 2085074048}
-  - component: {fileID: 2085074049}
+  - component: {fileID: 2085074052}
   - component: {fileID: 2085074050}
   - component: {fileID: 2085074051}
   m_Layer: 3
@@ -1745,7 +1830,7 @@ Animator:
   m_GameObject: {fileID: 2085074045}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6c13d8522fa9bf74e874d4e06e3c4927, type: 2}
+  m_Controller: {fileID: 22100000, guid: 0f76e409fdc3c8f4b8fdf1df2282948c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1757,20 +1842,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2085074049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2085074045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ff15d94290ecc542aa1ef6ca9d4fe87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Animation.PlayerAnimationHandler
-  animator: {fileID: 2085074048}
-  spriteRenderer: {fileID: 2085074047}
 --- !u!114 &2085074050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1846,6 +1917,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Visuals.DamageFlashFeedback
   spriteRenderer: {fileID: 2085074047}
   flashMaterial: {fileID: 2100000, guid: e74d79cfaa9072b49842d9752bf36f9b, type: 2}
+--- !u!114 &2085074052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085074045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8952612c2697fe04db6b19f655484602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Agents::GyeNyame.Agents.Animation.EntityAnimationHandler
+  animator: {fileID: 2085074048}
+  spriteRenderer: {fileID: 2085074047}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

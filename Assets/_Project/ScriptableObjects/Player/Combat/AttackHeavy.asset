@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Data.AttackDataSO
   damage: 3
   bufferTime: 0.2
-  knockbackForce: 10
+  knockbackForce: 7
   knockupForce: 5
   hitStopTime: 0.15
   screenShakeMultiplier: 0

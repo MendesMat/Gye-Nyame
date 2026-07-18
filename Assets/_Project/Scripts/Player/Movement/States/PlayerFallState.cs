@@ -1,35 +1,34 @@
 using GyeNyame.Core.StateMachine;
+using GyeNyame.Agents.Movement.States;
 
 namespace GyeNyame.Player.Movement.States
 {
-    public class PlayerFallState : BaseState
+    public class PlayerFallState : EntityFallState
     {
-        private readonly IPlayerMovementContext _context;
+        private readonly IPlayerMovementContext playerContext;
 
-        public PlayerFallState(IStateMachine stateMachine, IPlayerMovementContext context) : base(stateMachine)
+        public PlayerFallState(IStateMachine stateMachine, IPlayerMovementContext playerContext) : base(stateMachine, playerContext)
         {
-            _context = context;
+            this.playerContext = playerContext;
         }
 
         public override void FixedUpdate()
         {
-            _context.UpdateMovement
-            (
-                speedMultiplier: _context.AirSpeedMultiplier, 
-                lockDepth: _context.LockDepthDuringJump
-            );
+            playerContext.UpdateMovement(playerContext.AirSpeedMultiplier, playerContext.LockDepthDuringJump);
+            playerContext.ConsumeDashRequest();
 
-            _context.ConsumeDashRequest();
+            if (!playerContext.IsGrounded) return;
 
-            if (!_context.IsGrounded) return;
-
-            if (_context.HasMoveInput)
+            if (playerContext.HasMoveInput)
             {
-                StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerWalkState>());
+                TransitionToWalk();
                 return;
             }
 
-            StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerIdleState>());
+            TransitionToIdle();
         }
+
+        protected override void TransitionToIdle() => StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerIdleState>());
+        protected override void TransitionToWalk() => StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerWalkState>());
     }
 }

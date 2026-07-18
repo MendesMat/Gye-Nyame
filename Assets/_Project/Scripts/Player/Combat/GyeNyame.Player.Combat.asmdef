@@ -4,7 +4,8 @@
     "references": [
         "GyeNyame.Core",
         "GyeNyame.Combat",
-        "GyeNyame.Agents"
+        "GyeNyame.Agents",
+        "GyeNyame.Player.Movement"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
