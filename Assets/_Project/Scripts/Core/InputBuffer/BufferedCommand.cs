@@ -1,5 +1,5 @@
-using System;
-using GyeNyame.Core.EventBus;
+﻿using System;
+using GyeNyame.Core.Events;
 
 namespace GyeNyame.Core.InputBuffer
 {

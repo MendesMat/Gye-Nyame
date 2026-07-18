@@ -1,5 +1,5 @@
-using UnityEngine;
-using GyeNyame.Core.EventBus;
+﻿using UnityEngine;
+using GyeNyame.Core.Events;
 using GyeNyame.Core.Contracts.Messages;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Core.StateMachine;
@@ -9,12 +9,11 @@ namespace GyeNyame.Player.Movement
 {
     [RequireComponent(typeof(StateMachine))]
     [RequireComponent(typeof(Rigidbody))]
-    public class PlayerMovement : MonoBehaviour, IPlayerMovementContext, IPlayerLocomotion
+    public class PlayerMovement : MonoBehaviour, IPlayerMovementContext, IEntityLocomotion
     {
         [Header("Components")]
         [SerializeField] private StateMachine stateMachine;
         [SerializeField] private Rigidbody rigidBody;
-        [SerializeField] private MonoBehaviour kinematicPhysicsComponent;
 
         [Header("Movement Properties")]
         [SerializeField] private float speed;
@@ -64,13 +63,12 @@ namespace GyeNyame.Player.Movement
         #region Lifecycle
         private void Awake()
         {
-            if(kinematicPhysicsComponent is not IKinematicPhysics physics)
+            _kinematicPhysics = GetComponent<IKinematicPhysics>();
+            if (_kinematicPhysics == null)
             {
-                Debug.LogError("kinematicPhysicsComponent does not implement IKinematicPhysics!");
+                Debug.LogError("IKinematicPhysics not found on PlayerMovement object!", this);
                 return;
             }
-            
-            _kinematicPhysics = physics;
 
             InitializeStateMachine();
         }
@@ -244,6 +242,25 @@ namespace GyeNyame.Player.Movement
 
             targetPosition = ApplyVerticalMovement(targetPosition);
             rigidBody.MovePosition(targetPosition);
+        }
+
+        public void ApplyExternalForce(Vector3 direction, float force, float verticalVelocity)
+        {
+            _verticalVelocity = verticalVelocity;
+            _isGrounded = false;
+            
+            var forcedMovement = direction * force * Time.fixedDeltaTime;
+            var currentPosition = rigidBody.position;
+            var allowedMovement = _kinematicPhysics.CalculateAllowedMovement(currentPosition, forcedMovement);
+            var targetPosition = currentPosition + allowedMovement;
+
+            targetPosition = ApplyVerticalMovement(targetPosition);
+            rigidBody.MovePosition(targetPosition);
+        }
+
+        public void ReturnToIdle()
+        {
+            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerIdleState>());
         }
         #endregion
     }

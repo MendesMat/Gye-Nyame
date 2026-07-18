@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using GyeNyame.Core.EventBus;
+using GyeNyame.Core.Events;
 
 namespace GyeNyame.Core.InputBuffer
 {

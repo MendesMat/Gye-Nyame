@@ -1,10 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 using GyeNyame.Core.InputBuffer;
 using GyeNyame.Core.Contracts.Messages;
 using GyeNyame.Core.Contracts.Interfaces;
-using GyeNyame.Core.EventBus;
+using GyeNyame.Core.Events;
 using GyeNyame.Core.StateMachine;
 using GyeNyame.Player.Combat.States;
+using GyeNyame.Combat.Data;
+using GyeNyame.Combat.Components;
 
 namespace GyeNyame.Player.Combat
 {
@@ -23,11 +25,11 @@ namespace GyeNyame.Player.Combat
         public bool IsCancelWindowOpen { get; private set; }
         public InputBuffer InputBuffer => inputBuffer;
 
-        private IPlayerLocomotion _locomotionContext;
+        private IEntityLocomotion _locomotionContext;
 
         private void Awake()
         {
-            _locomotionContext = GetComponent<IPlayerLocomotion>();
+            _locomotionContext = GetComponent<IEntityLocomotion>();
             InitializeStateMachine();
         }
 
@@ -35,8 +37,6 @@ namespace GyeNyame.Player.Combat
         {
             EventBus.Subscribe<PlayerAttackLightMessage>(OnAttackLight);
             EventBus.Subscribe<PlayerAttackHeavyMessage>(OnAttackHeavy);
-            EventBus.Subscribe<AnimationCancelWindowMessage>(OnAnimationCancelWindow);
-            EventBus.Subscribe<AnimationFinishAttackMessage>(OnAnimationFinishAttack);
             EventBus.Subscribe<PlayerDashMessage>(OnDashMessage);
             EventBus.Subscribe<PlayerJumpMessage>(OnJumpMessage);
         }
@@ -45,8 +45,6 @@ namespace GyeNyame.Player.Combat
         {
             EventBus.Unsubscribe<PlayerAttackLightMessage>(OnAttackLight);
             EventBus.Unsubscribe<PlayerAttackHeavyMessage>(OnAttackHeavy);
-            EventBus.Unsubscribe<AnimationCancelWindowMessage>(OnAnimationCancelWindow);
-            EventBus.Unsubscribe<AnimationFinishAttackMessage>(OnAnimationFinishAttack);
             EventBus.Unsubscribe<PlayerDashMessage>(OnDashMessage);
             EventBus.Unsubscribe<PlayerJumpMessage>(OnJumpMessage);
         }
@@ -96,12 +94,11 @@ namespace GyeNyame.Player.Combat
             inputBuffer.BufferCommand<PlayerAttackHeavyMessage>(heavyAttack.BufferTime);
         }
         
-        private void OnAnimationCancelWindow(AnimationCancelWindowMessage message)
-        {
-            IsCancelWindowOpen = message.IsOpen;
-        }
+        public void OpenCancelWindow() => IsCancelWindowOpen = true;
+        
+        public void CloseCancelWindow() => IsCancelWindowOpen = false;
 
-        private void OnAnimationFinishAttack(AnimationFinishAttackMessage message)
+        public void FinishAttack()
         {
             IsCancelWindowOpen = false;
             inputBuffer.Clear();

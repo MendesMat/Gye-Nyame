@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using GyeNyame.Core.EventBus;
+using GyeNyame.Core.Events;
 using GyeNyame.Core.Contracts.Messages;
 
 namespace GyeNyame.Player.Input

@@ -1,5 +1,5 @@
-using UnityEngine;
-using GyeNyame.Core.EventBus;
+﻿using UnityEngine;
+using GyeNyame.Core.Events;
 
 namespace GyeNyame.Core.Contracts.Messages
 {

@@ -2,7 +2,9 @@
     "name": "GyeNyame.Player.Combat",
     "rootNamespace": "",
     "references": [
-        "GyeNyame.Core"
+        "GyeNyame.Core",
+        "GyeNyame.Combat",
+        "GyeNyame.Agents"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

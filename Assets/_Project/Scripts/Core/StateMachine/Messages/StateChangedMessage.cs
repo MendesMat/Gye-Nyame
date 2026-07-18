@@ -1,4 +1,4 @@
-using GyeNyame.Core.EventBus;
+﻿using GyeNyame.Core.Events;
 using GyeNyame.Core.StateMachine;
 
 namespace GyeNyame.Core.StateMachine.Messages

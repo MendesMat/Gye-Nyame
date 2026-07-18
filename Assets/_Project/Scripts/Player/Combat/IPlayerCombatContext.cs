@@ -1,4 +1,5 @@
 using GyeNyame.Core.InputBuffer;
+using GyeNyame.Combat.Data;
 
 namespace GyeNyame.Player.Combat
 {

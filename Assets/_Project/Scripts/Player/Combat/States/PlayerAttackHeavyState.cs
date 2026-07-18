@@ -7,9 +7,9 @@ namespace GyeNyame.Player.Combat.States
     public class PlayerAttackHeavyState : BaseState
     {
         private readonly IPlayerCombatContext _combatContext;
-        private readonly Core.Contracts.Interfaces.IPlayerLocomotion _locomotionContext;
+        private readonly Core.Contracts.Interfaces.IEntityLocomotion _locomotionContext;
 
-        public PlayerAttackHeavyState(IStateMachine stateMachine, IPlayerCombatContext combatContext, IPlayerLocomotion locomotionContext) 
+        public PlayerAttackHeavyState(IStateMachine stateMachine, IPlayerCombatContext combatContext, IEntityLocomotion locomotionContext) 
         : base(stateMachine)
         {
             _combatContext = combatContext;

@@ -38,5 +38,5 @@ O módulo de Combate atua como **Consumidor** de comandos de Input e **Emissor**
 - **PlayerCombat** ➔ *Guarda no* ➔ **InputBuffer**
 - **InputBuffer** ➔ *Valida* ➔ **PlayerCombat**
 - **PlayerCombat** ➔ *Lê Contexto* ➔ **States (AttackLight1, AttackLight2, AttackHeavy)**
-- **States** ➔ *Bloqueia Rosto* ➔ **IPlayerLocomotion**
+- **States** ➔ *Bloqueia Rosto* ➔ **IEntityLocomotion**
 - **PlayerCombat** ➔ *Publish EndCombatMessage* ➔ **EventBus**

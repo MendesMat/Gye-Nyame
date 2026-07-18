@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace GyeNyame.Core.EventBus
+namespace GyeNyame.Core.Events
 {
     public static class EventBus
     {

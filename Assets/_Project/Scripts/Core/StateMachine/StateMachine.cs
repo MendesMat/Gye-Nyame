@@ -2,6 +2,7 @@ using GyeNyame.Core.StateMachine.Messages;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using GyeNyame.Core.Events;
 
 namespace GyeNyame.Core.StateMachine
 {
@@ -53,7 +54,7 @@ namespace GyeNyame.Core.StateMachine
             CurrentState.Enter();
 
             OnStateChanged?.Invoke(previousState, CurrentState);
-            EventBus.EventBus.Publish<StateChangedMessage>(new StateChangedMessage(previousState, CurrentState));
+            EventBus.Publish<StateChangedMessage>(new StateChangedMessage(previousState, CurrentState));
         }
 
         public void PopState()

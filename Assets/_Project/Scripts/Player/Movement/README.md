@@ -13,7 +13,7 @@ Este módulo é o coração da física e locomoção do jogador. Ele traduz inte
 ## Como Usar
 
 1. O GameObject precisa conter os componentes `StateMachine`, `Rigidbody` e `PlayerMovement`.
-2. A classe `PlayerMovement` implementa `IPlayerMovementContext` e `IPlayerLocomotion`, que servem para expor dados da locomoção de forma encapsulada aos *States* ou a outros sistemas.
+2. A classe `PlayerMovement` implementa `IPlayerMovementContext` e `IEntityLocomotion`, que servem para expor dados da locomoção de forma encapsulada aos *States* ou a outros sistemas.
 3. No Unity Editor, ajuste os *Speed*, *Gravity*, *Jump Force*, e *Dash Duration*.
 
 ## Fluxo de Comunicação e Arquitetura
@@ -29,7 +29,7 @@ O sistema atua como **Consumidor** primário das intenções de movimento.
 - Dependendo do estado, altera transformações ou velocidades físicas.
 
 ### Para onde envia informação?
-- Ele não envia muitas informações diretas via `EventBus`. Sua comunicação de saída acontece, principalmente, provendo variáveis acessíveis através de interfaces como `IPlayerLocomotion` (consumidas, por exemplo, pela animação para virar o sprite) e pelas trocas de estado (A `StateMachine` dispara o evento `OnStateChanged`, alertando a animação para mudar os clipes).
+- Ele não envia muitas informações diretas via `EventBus`. Sua comunicação de saída acontece, principalmente, provendo variáveis acessíveis através de interfaces como `IEntityLocomotion` (consumidas, por exemplo, pela animação para virar o sprite) e pelas trocas de estado (A `StateMachine` dispara o evento `OnStateChanged`, alertando a animação para mudar os clipes).
 
 ---
 
@@ -37,5 +37,5 @@ O sistema atua como **Consumidor** primário das intenções de movimento.
 - **EventBus** ➔ *EndCombatMessage* ➔ **PlayerMovement**
 - **PlayerMovement** ➔ *Lê Contexto* ➔ **States (Idle, Walk, Jump, Fall, Dash)**
 - **States** ➔ *Atualiza Física* ➔ **Rigidbody**
-- **PlayerMovement** ➔ *Implementa* ➔ **IPlayerLocomotion**
-- **IPlayerLocomotion** ➔ *É lida por* ➔ **PlayerAnimationHandler**
+- **PlayerMovement** ➔ *Implementa* ➔ **IEntityLocomotion**
+- **IEntityLocomotion** ➔ *É lida por* ➔ **PlayerAnimationHandler**

@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33fbae4ddc2f6bd458029fba0253967a, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d806fa2804b59441ae85aa85064a466, type: 3}
   m_Name: AttackLight1
-  m_EditorClassIdentifier: GyeNyame.Player.Combat::GyeNyame.Player.Combat.AttackDataSO
+  m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Data.AttackDataSO
   damage: 1
   bufferTime: 0.2
+  knockbackForce: 2
+  knockupForce: 0
   hitStopTime: 0.05
   screenShakeMultiplier: 0

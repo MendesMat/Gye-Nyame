@@ -1,4 +1,4 @@
-using GyeNyame.Core.EventBus;
+﻿using GyeNyame.Core.Events;
 
 namespace GyeNyame.Core.Contracts.Messages
 {

@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using GyeNyame.Core.EventBus;
+using GyeNyame.Core.Events;
 using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.Contracts.Messages;
 using GyeNyame.Core.Contracts.Interfaces;
@@ -17,7 +17,7 @@ namespace GyeNyame.Player.Animation
         [SerializeField] private SpriteRenderer spriteRenderer;
 
         private IStateMachine _stateMachine;
-        private IPlayerLocomotion _locomotionContext;
+        private IEntityLocomotion _locomotionContext;
         private readonly Dictionary<string, int> _stateToHash = new();
 
         private float _facingDirectionX = 1f;
@@ -46,7 +46,7 @@ namespace GyeNyame.Player.Animation
         private void Awake()
         {
             _stateMachine = GetComponentInParent<IStateMachine>();
-            _locomotionContext = GetComponentInParent<IPlayerLocomotion>();
+            _locomotionContext = GetComponentInParent<IEntityLocomotion>();
             SetupAnimator();
         }
 
@@ -111,10 +111,8 @@ namespace GyeNyame.Player.Animation
         #region Visual
         private void FlipSpriteTowardsFacingDirection()
         {
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.flipX = _facingDirectionX < 0f;
-            }
+            float yRotation = _facingDirectionX < 0f ? 180f : 0f;
+            transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
         }
         #endregion
     }

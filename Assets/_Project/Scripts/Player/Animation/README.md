@@ -5,14 +5,14 @@ Este módulo é o elo visual. Ele traduz os estados lógicos (da máquina de est
 ## Mecânicas e Funcionalidades
 
 - **Sincronização de Estado/Animação:** Quando a `StateMachine` transita, este módulo capta e reproduz a animação exata baseada no nome do estado, de forma genérica (utilizando o hash do nome para performance).
-- **Rosto e Inversão de Sprite (Flipping):** Monitora a direção de movimento através da interface `IPlayerLocomotion`. Se o jogador andou para a esquerda (X < 0), ele vira (flipX) o componente `SpriteRenderer`.
+- **Rosto e Inversão de Sprite (Flipping):** Monitora a direção de movimento através da interface `IEntityLocomotion`. Se o jogador andou para a esquerda (X < 0), ele vira (flipX) o componente `SpriteRenderer`.
 - **Ancoragem de Eventos na Timeline:** Usando *Unity Animation Events*, possibilita avisar ao `Core` o exato *frame* onde um ataque permite "cancelamento" ou o momento exato em que a animação acabou, libertando o estado.
 
 ## Como Usar
 
 1. No GameObject, anexe o `PlayerAnimationHandler` (e `PlayerAnimationEventHandler` caso os eventos já tenham sido separados).
 2. É obrigatório ter um `Animator` (com os *States* configurados e nomeados com o mesmo nome que consta no *Script* — Ex: `"Walk"`, `"Jump"`, `"Fall"`) e um `SpriteRenderer`.
-3. O componente deve estar no mesmo *GameObject* (ou ser filho direto) onde repousa a `StateMachine` e os scripts que implementam `IPlayerLocomotion` (Geralmente o script de *Movement*).
+3. O componente deve estar no mesmo *GameObject* (ou ser filho direto) onde repousa a `StateMachine` e os scripts que implementam `IEntityLocomotion` (Geralmente o script de *Movement*).
 
 ## Fluxo de Comunicação e Arquitetura
 
@@ -20,7 +20,7 @@ Trabalha de forma bidirecional e fracamente acoplada. É reativo em relação ao
 
 ### De onde recebe informação?
 - **StateMachine (Lógica Direta):** Escuta o evento local de C# nativo (`_stateMachine.OnStateChanged`).
-- **IPlayerLocomotion (Contexto):** Lê via *interface* a variável de direção (`FacingDirectionX`) provida pelo sistema de movimento para virar o sprite visualmente.
+- **IEntityLocomotion (Contexto):** Lê via *interface* a variável de direção (`FacingDirectionX`) provida pelo sistema de movimento para virar o sprite visualmente.
 - **Unity Animator (Pipeline C++ -> C#):** Lê *Animation Events* (marcadores de tempo colocados fisicamente no `.anim`) através de funções públicas interceptadas.
 
 ### O que faz com a informação?
@@ -36,7 +36,7 @@ Trabalha de forma bidirecional e fracamente acoplada. É reativo em relação ao
 ---
 
 - **StateMachine** ➔ *OnStateChanged (C# Event)* ➔ **PlayerAnimationHandler**
-- **IPlayerLocomotion** ➔ *Provê X Direction* ➔ **PlayerAnimationHandler**
+- **IEntityLocomotion** ➔ *Provê X Direction* ➔ **PlayerAnimationHandler**
 - **PlayerAnimationHandler** ➔ *Play(Hash) & FlipX* ➔ **Visual (Animator & SpriteRenderer)**
 - **Visual** ➔ *Animation Events (Timeline)* ➔ **PlayerAnimationEventHandler**
 - **PlayerAnimationEventHandler** ➔ *Publish AnimationCancelWindowMessage* ➔ **EventBus**
