@@ -11,6 +11,8 @@ namespace GyeNyame.Combat.Components
         [SerializeField] private Collider hitboxCollider;
         [SerializeField] private AttackDataSO attackData;
 
+        public AttackDataSO BoundAttackData => attackData;
+
         public void EnableHitbox()
         {
             if (attackData == null)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using GyeNyame.Core.InputBuffer;
 using GyeNyame.Core.Contracts.Messages;
@@ -18,19 +19,37 @@ namespace GyeNyame.Player.Combat
         [SerializeField] private StateMachine stateMachine;
         [SerializeField] private InputBuffer inputBuffer;
 
-        [Header("Combat Data")]
-        [SerializeField] private AttackDataSO[] lightAttacks;
-        [SerializeField] private AttackDataSO heavyAttack;
+        [Header("Combo Starters")]
+        [SerializeField] private AttackDataSO lightAttackStarter;
+        [SerializeField] private AttackDataSO heavyAttackStarter;
 
         public bool IsCancelWindowOpen { get; private set; }
         public InputBuffer InputBuffer => inputBuffer;
+        public AttackDataSO CurrentAttackData => _currentAttackData;
 
         private IEntityLocomotion _locomotionContext;
+        private AttackDataSO _currentAttackData;
+        private float _lastAttackTime = 0f;
+        private float _cooldownEndTime = 0f;
+        private readonly Dictionary<AttackDataSO, IHitbox> _hitboxMap = new();
 
         private void Awake()
         {
             _locomotionContext = GetComponent<IEntityLocomotion>();
             InitializeStateMachine();
+            InitializeHitboxes();
+        }
+
+        private void InitializeHitboxes()
+        {
+            var hitboxes = GetComponentsInChildren<HitboxComponent>(true);
+            foreach (var hitbox in hitboxes)
+            {
+                if (hitbox.BoundAttackData != null)
+                {
+                    _hitboxMap[hitbox.BoundAttackData] = hitbox;
+                }
+            }
         }
 
         private void OnEnable()
@@ -51,47 +70,87 @@ namespace GyeNyame.Player.Combat
 
         private void Update()
         {
+            if (_locomotionContext.HasMoveInput) ResetCombo();
+
             var stateName = stateMachine.CurrentState?.StateName;
-            if (stateName != "PlayerIdleState" && stateName != "PlayerWalkState") return;
+            bool canCombo = stateName == "PlayerIdleState" || stateName == "PlayerWalkState" || IsCancelWindowOpen;
+            
+            if (!canCombo) return;
+
+            if (!IsCancelWindowOpen && _currentAttackData != null && Time.time - _lastAttackTime > _currentAttackData.ComboWindowTime)
+            {
+                ResetCombo();
+            }
 
             if (inputBuffer.HasCommand<PlayerAttackLightMessage>())
             {
                 inputBuffer.ConsumeCommand<PlayerAttackLightMessage>();
-                stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerAttackLight1State>());
+
+                if (_currentAttackData == null)
+                {
+                    if (Time.time < _cooldownEndTime || lightAttackStarter == null) return;
+                    _currentAttackData = lightAttackStarter;
+                }
+                else
+                {
+                    if (_currentAttackData.NextLightCombo == null) return;
+                    _currentAttackData = _currentAttackData.NextLightCombo;
+                }
+
+                stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericPlayerAttackState>());
                 return;
             }
 
             if (inputBuffer.HasCommand<PlayerAttackHeavyMessage>())
             {
                 inputBuffer.ConsumeCommand<PlayerAttackHeavyMessage>();
-                stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerAttackHeavyState>());
+                
+                if (_currentAttackData == null)
+                {
+                    if (Time.time < _cooldownEndTime || heavyAttackStarter == null) return;
+                    _currentAttackData = heavyAttackStarter;
+                }
+                else
+                {
+                    if (_currentAttackData.NextHeavyCombo == null) return;
+                    _currentAttackData = _currentAttackData.NextHeavyCombo;
+                }
+                
+                stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericPlayerAttackState>());
             }
+        }
+
+        private void ResetCombo()
+        {
+            if (_currentAttackData != null)
+            {
+                _cooldownEndTime = _lastAttackTime + _currentAttackData.CooldownTime;
+            }
+            _currentAttackData = null;
         }
 
         private void InitializeStateMachine()
         {
-            stateMachine.RegisterState<PlayerAttackLight1State>(new StateFactory<PlayerAttackLight1State>
-                (sm => new PlayerAttackLight1State(sm, this, _locomotionContext)));
-
-            stateMachine.RegisterState<PlayerAttackLight2State>(new StateFactory<PlayerAttackLight2State>
-                (sm => new PlayerAttackLight2State(sm, this, _locomotionContext)));
-
-            stateMachine.RegisterState<PlayerAttackHeavyState>(new StateFactory<PlayerAttackHeavyState>
-                (sm => new PlayerAttackHeavyState(sm, this, _locomotionContext)));
+            stateMachine.RegisterState<GenericPlayerAttackState>(new StateFactory<GenericPlayerAttackState>
+                (sm => new GenericPlayerAttackState(sm, this, _locomotionContext)));
         }
 
         private void OnAttackLight(PlayerAttackLightMessage message)
         {
-            if (lightAttacks == null || lightAttacks.Length == 0 || lightAttacks[0] == null) return;
+            float bufferTime = 0.2f;
+            if (_currentAttackData != null && _currentAttackData.NextLightCombo != null) bufferTime = _currentAttackData.NextLightCombo.BufferTime;
+            else if (lightAttackStarter != null) bufferTime = lightAttackStarter.BufferTime;
             
-            inputBuffer.BufferCommand<PlayerAttackLightMessage>(lightAttacks[0].BufferTime);
+            inputBuffer.BufferCommand<PlayerAttackLightMessage>(bufferTime);
         }
 
         private void OnAttackHeavy(PlayerAttackHeavyMessage message)
         {
-            if (heavyAttack == null) return;
+            float bufferTime = 0.2f;
+            if (_currentAttackData != null && _currentAttackData.NextHeavyCombo != null) bufferTime = _currentAttackData.NextHeavyCombo.BufferTime;
+            else if (heavyAttackStarter != null) bufferTime = heavyAttackStarter.BufferTime;
             
-            inputBuffer.BufferCommand<PlayerAttackHeavyMessage>(heavyAttack.BufferTime);
+            inputBuffer.BufferCommand<PlayerAttackHeavyMessage>(bufferTime);
         }
         
         public void OpenCancelWindow() => IsCancelWindowOpen = true;
@@ -102,7 +161,27 @@ namespace GyeNyame.Player.Combat
         {
             if (stateMachine.CurrentState is BasePlayerAttackState attackState)
             {
+                _lastAttackTime = Time.time;
                 attackState.OnAnimationFinish();
+            }
+        }
+
+        public void OpenHitbox()
+        {
+            if (_currentAttackData == null) return;
+            
+            if (_hitboxMap.TryGetValue(_currentAttackData, out var hitbox))
+            {
+                hitbox.EnableHitbox();
+            }
+        }
+
+        public void CloseHitbox()
+        {
+            if (_currentAttackData == null) return;
+            if (_hitboxMap.TryGetValue(_currentAttackData, out var hitbox))
+            {
+                hitbox.DisableHitbox();
             }
         }
 
@@ -111,6 +190,8 @@ namespace GyeNyame.Player.Combat
 
         private void HandleInterrupt()
         {
+            ResetCombo();
+            
             if (!IsCancelWindowOpen) return;
 
             if (stateMachine.CurrentState is BasePlayerAttackState attackState && attackState.AllowInterrupt)
@@ -119,19 +200,6 @@ namespace GyeNyame.Player.Combat
                 inputBuffer.Clear();
                 EventBus.Publish(new EndCombatMessage());
             }
-        }
-
-        public AttackDataSO GetLightAttackData(int comboIndex)
-        {
-            if (lightAttacks != null && comboIndex >= 0 && comboIndex < lightAttacks.Length)
-                return lightAttacks[comboIndex];
-                
-            return null;
-        }
-
-        public AttackDataSO GetHeavyAttackData()
-        {
-            return heavyAttack;
         }
     }
 }

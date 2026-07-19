@@ -82,7 +82,7 @@ namespace GyeNyame.Agents.Animation
             
             if (!categoryToHash.TryGetValue(state.StateCategory, out int animationHash)) return false;
             
-            animator.Play(animationHash);
+            animator.Play(animationHash, -1, 0f);
             return true;
         }
 

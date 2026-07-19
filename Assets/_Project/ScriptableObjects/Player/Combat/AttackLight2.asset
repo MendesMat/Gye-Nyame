@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: AttackLight2
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Data.AttackDataSO
   damage: 1
+  nextLightCombo: {fileID: 0}
+  nextHeavyCombo: {fileID: 0}
+  animationCategory: 7
   bufferTime: 0.2
+  comboWindowTime: 0.2
+  cooldownTime: 0.1
   knockbackForce: 3
   knockupForce: 0
   hitStopTime: 0.1

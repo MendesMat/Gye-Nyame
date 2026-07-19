@@ -15,6 +15,7 @@ namespace GyeNyame.Player.Movement.States
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (StateMachine.CurrentState != this) return;
 
             if (playerContext.ConsumeDashRequest())
             {

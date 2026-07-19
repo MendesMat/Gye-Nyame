@@ -997,10 +997,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Player.Combat::GyeNyame.Player.Combat.PlayerCombat
   stateMachine: {fileID: 1082542550}
   inputBuffer: {fileID: 1082542552}
-  lightAttacks:
-  - {fileID: 11400000, guid: 00e425d66368be54f96fcfa08a5b39e2, type: 2}
-  - {fileID: 11400000, guid: 4dd4c8df2ec4552499c7512a4b2be0e2, type: 2}
-  heavyAttack: {fileID: 11400000, guid: 31ac0185395ccb048943ca1d876fd84c, type: 2}
+  lightAttackStarter: {fileID: 11400000, guid: 00e425d66368be54f96fcfa08a5b39e2, type: 2}
+  heavyAttackStarter: {fileID: 11400000, guid: 31ac0185395ccb048943ca1d876fd84c, type: 2}
 --- !u!114 &1082542552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1899,10 +1897,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  hitboxes:
-  - {fileID: 1774752705}
-  - {fileID: 1035733698}
-  - {fileID: 509027198}
+  onOpenHitbox:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1082542551}
+        m_TargetAssemblyTypeName: GyeNyame.Player.Combat.PlayerCombat, GyeNyame.Player.Combat
+        m_MethodName: OpenHitbox
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onCloseHitbox:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1082542551}
+        m_TargetAssemblyTypeName: GyeNyame.Player.Combat.PlayerCombat, GyeNyame.Player.Combat
+        m_MethodName: CloseHitbox
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2085074051
 MonoBehaviour:
   m_ObjectHideFlags: 0

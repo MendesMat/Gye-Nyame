@@ -1,5 +1,6 @@
 using GyeNyame.Core.InputBuffer;
 using GyeNyame.Combat.Data;
+using GyeNyame.Core.Contracts.Interfaces;
 
 namespace GyeNyame.Player.Combat
 {
@@ -7,9 +8,7 @@ namespace GyeNyame.Player.Combat
     {
         bool IsCancelWindowOpen { get; }
         InputBuffer InputBuffer { get; }
-        
-        AttackDataSO GetLightAttackData(int comboIndex);
-        AttackDataSO GetHeavyAttackData();
+        AttackDataSO CurrentAttackData { get; }
         void CloseCancelWindow();
     }
 }
