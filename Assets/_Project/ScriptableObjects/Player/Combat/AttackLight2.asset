@@ -16,5 +16,5 @@ MonoBehaviour:
   bufferTime: 0.2
   knockbackForce: 3
   knockupForce: 0
-  hitStopTime: 0.05
+  hitStopTime: 0.1
   screenShakeMultiplier: 0
