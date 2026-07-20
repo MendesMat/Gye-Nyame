@@ -1,4 +1,4 @@
-﻿using GyeNyame.Core.Events;
+using GyeNyame.Core.Events;
 
 namespace GyeNyame.Core.Contracts.Messages
 {
@@ -13,4 +13,10 @@ namespace GyeNyame.Core.Contracts.Messages
     }
     
     public readonly struct AnimationFinishAttackMessage : IMessage { }
+
+    public readonly struct AnimationFinishDeathMessage : IMessage
+    {
+        public UnityEngine.GameObject Target { get; }
+        public AnimationFinishDeathMessage(UnityEngine.GameObject target) => Target = target;
+    }
 }

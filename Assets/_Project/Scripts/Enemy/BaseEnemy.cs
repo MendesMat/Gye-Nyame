@@ -18,12 +18,16 @@ namespace GyeNyame.Enemy
         protected virtual void Awake()
         {
             var locomotion = GetComponent<IEntityLocomotion>();
-            if (locomotion == null) UnityEngine.Debug.LogError($"[Debugger] O Inimigo {gameObject.name} nao tem o script EnemyMovement (ou outro IEntityLocomotion) atrelado!");
+            var health = GetComponentInChildren<IEntityHealth>();
+            var visuals = GetComponentInChildren<IEntityVisuals>();
+            if (locomotion == null) UnityEngine.Debug.LogError($"[Debugger] O Inimigo {gameObject.name} nao tem o script EnemyMovement (ou interface IEntityLocomotion) atrelado no root!");
+            if (health == null) UnityEngine.Debug.LogError($"[Debugger] O Inimigo {gameObject.name} nao tem o script EntityHealth (ou interface IEntityHealth) atrelado no root ou filhos!");
 
             stateMachine.RegisterState<EntityIdleState>(new StateFactory<EntityIdleState>(sm => new EntityIdleState(sm, locomotion)));
             stateMachine.RegisterState<EntityWalkState>(new StateFactory<EntityWalkState>(sm => new EntityWalkState(sm, locomotion)));
             stateMachine.RegisterState<EntityFallState>(new StateFactory<EntityFallState>(sm => new EntityFallState(sm, locomotion)));
-            stateMachine.RegisterState<EntityHurtState>(new StateFactory<EntityHurtState>(sm => new EntityHurtState(sm, locomotion)));
+            stateMachine.RegisterState<EntityHurtState>(new StateFactory<EntityHurtState>(sm => new EntityHurtState(sm, locomotion, health)));
+            stateMachine.RegisterState<EntityDeadState>(new StateFactory<EntityDeadState>(sm => new EntityDeadState(sm, locomotion, health, visuals)));
         }
 
         protected virtual void OnEnable()

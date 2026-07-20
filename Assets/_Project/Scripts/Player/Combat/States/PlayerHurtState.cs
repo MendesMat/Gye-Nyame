@@ -10,8 +10,8 @@ namespace GyeNyame.Player.Combat.States
     {
         private readonly InputBuffer _inputBuffer;
 
-        public PlayerHurtState(IStateMachine stateMachine, InputBuffer inputBuffer, IEntityLocomotion locomotionContext) 
-            : base(stateMachine, locomotionContext)
+        public PlayerHurtState(IStateMachine stateMachine, InputBuffer inputBuffer, IEntityLocomotion locomotionContext, IEntityHealth healthContext) 
+            : base(stateMachine, locomotionContext, healthContext)
         {
             _inputBuffer = inputBuffer;
         }
@@ -25,6 +25,11 @@ namespace GyeNyame.Player.Combat.States
         protected override void TransitionToIdle()
         {
             StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerIdleState>());
+        }
+
+        protected override void TransitionToDeath()
+        {
+            StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerDeadState>());
         }
     }
 }

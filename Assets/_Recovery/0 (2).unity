@@ -199,8 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2a24d77b64813346ab779cf290be9f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Components.EntityHealth
-  maxHealth: 5
-  deadLayerName: Dead
+  maxHealth: 100
 --- !u!1 &108282125
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,7 +467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &410087040
 Light:
   m_ObjectHideFlags: 0
@@ -479,7 +478,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 1
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
@@ -844,7 +843,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Stats.PlayerHealth
   maxHealth: 100
-  deadLayerName: Dead
   _stateMachine: {fileID: 1082542550}
 --- !u!1 &1082542542
 GameObject:
@@ -1039,7 +1037,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1082542542}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b565a54e614ea8a4db94b0ec666049bc, type: 3}
   m_Name: 
@@ -1203,7 +1201,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1284654817}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b565a54e614ea8a4db94b0ec666049bc, type: 3}
   m_Name: 
@@ -1265,7 +1263,6 @@ GameObject:
   - component: {fileID: 1503992885}
   - component: {fileID: 1503992886}
   - component: {fileID: 1503992888}
-  - component: {fileID: 1503992890}
   - component: {fileID: 1503992887}
   - component: {fileID: 1503992889}
   m_Layer: 6
@@ -1399,20 +1396,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Agents::GyeNyame.Agents.Animation.EntityAnimationHandler
   animator: {fileID: 1503992888}
   spriteRenderer: {fileID: 1503992886}
---- !u!114 &1503992890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1503992884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d42e2ccd2d87bc84baa45384251de0fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: GyeNyame.Agents::GyeNyame.Agents.Visuals.EntityVisuals
-  spriteRenderer: {fileID: 1503992886}
-  fadeDuration: 1
 --- !u!1 &1774752702
 GameObject:
   m_ObjectHideFlags: 0
@@ -1750,7 +1733,6 @@ GameObject:
   - component: {fileID: 2085074046}
   - component: {fileID: 2085074047}
   - component: {fileID: 2085074048}
-  - component: {fileID: 2085074053}
   - component: {fileID: 2085074052}
   - component: {fileID: 2085074050}
   - component: {fileID: 2085074051}
@@ -1973,20 +1955,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Agents::GyeNyame.Agents.Animation.EntityAnimationHandler
   animator: {fileID: 2085074048}
   spriteRenderer: {fileID: 2085074047}
---- !u!114 &2085074053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2085074045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d42e2ccd2d87bc84baa45384251de0fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: GyeNyame.Agents::GyeNyame.Agents.Visuals.EntityVisuals
-  spriteRenderer: {fileID: 2085074047}
-  fadeDuration: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

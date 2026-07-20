@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.Contracts.Interfaces;
+using GyeNyame.Core.Events;
+using GyeNyame.Core.Contracts.Messages;
 
 namespace GyeNyame.Agents.Animation
 {
@@ -92,6 +94,12 @@ namespace GyeNyame.Agents.Animation
         {
             float yRotation = facingDirectionX < 0f ? 180f : 0f;
             transform.localRotation = Quaternion.Euler(0f, yRotation, 0f);
+        }
+
+        public void OnDeathAnimationFinish()
+        {
+            var targetGo = (stateMachine as MonoBehaviour)?.gameObject ?? gameObject;
+            EventBus.Publish(new AnimationFinishDeathMessage(targetGo));
         }
     }
 }

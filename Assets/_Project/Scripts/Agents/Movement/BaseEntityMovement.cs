@@ -42,6 +42,18 @@ namespace GyeNyame.Agents.Movement
             UpdateFacingDirection();
         }
 
+        public virtual void DisablePhysics()
+        {
+            if (rigidBody != null)
+            {
+                if (!rigidBody.isKinematic)
+                {
+                    rigidBody.linearVelocity = Vector3.zero;
+                    rigidBody.isKinematic = true;
+                }
+            }
+        }
+
         protected virtual void UpdateFacingDirection()
         {
             if (currentMoveInput.x != 0f)

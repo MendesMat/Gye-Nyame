@@ -10,6 +10,7 @@ namespace GyeNyame.Core.Contracts.Interfaces
         float VerticalVelocity { get; }
         void UpdateMovement(float speedMultiplier, bool lockDepth);
         void SetFacingDirectionLock(bool isLocked);
+        void DisablePhysics();
         void ApplyExternalForce(Vector3 direction, float force, float verticalVelocity);
     }
 }

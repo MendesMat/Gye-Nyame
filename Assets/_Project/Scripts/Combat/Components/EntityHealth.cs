@@ -7,31 +7,49 @@ using GyeNyame.Core.Events;
 
 namespace GyeNyame.Combat.Components
 {
-    public class EntityHealth : MonoBehaviour, IDamageable
+    public class EntityHealth : MonoBehaviour, IDamageable, IEntityHealth
     {
         [Header("Health Settings")]
         [SerializeField] protected float maxHealth = 100f;
         
+        [Header("Physics Settings")]
+        [SerializeField] protected string deadLayerName = "Dead";
+
         public event Action<DamageData> OnDamageTakenEvent;
 
+        public float CurrentHealth => currentHealth;
+        public float MaxHealth => maxHealth;
+        public bool IsDead => currentHealth <= 0;
+
         protected float currentHealth;
+        private int _originalLayer;
+        private int _deadLayerIndex;
 
         protected virtual void Awake()
         {
             currentHealth = maxHealth;
+            _originalLayer = gameObject.layer;
+            _deadLayerIndex = LayerMask.NameToLayer(deadLayerName);
+        }
+
+        public void SetDeadLayer(bool isDeadLayer)
+        {
+            gameObject.layer = isDeadLayer ? _deadLayerIndex : _originalLayer;
         }
 
         public void TakeDamage(DamageData damageData)
         {
-            if (currentHealth <= 0) return;
-
+            bool wasDead = IsDead;
+            
             currentHealth -= damageData.Amount;
+            if (currentHealth < 0) currentHealth = 0;
 
             EventBus.Publish(new EntityDamagedMessage(transform.root.gameObject, damageData));
 
             OnDamageTakenEvent?.Invoke(damageData);
             OnDamageReceived(damageData);
 
+            if (wasDead) return;
             CheckDeath();
         }
 
@@ -45,8 +63,7 @@ namespace GyeNyame.Combat.Components
 
         protected virtual void Die()
         {
-            Debug.Log($"{gameObject.name} died!");
-            gameObject.SetActive(false);
+            EventBus.Publish(new EntityDeadMessage(gameObject));
         }
     }
 }

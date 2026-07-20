@@ -11,14 +11,20 @@ namespace GyeNyame.Agents.Combat.States
         protected float timer;
         protected DamageData currentDamage;
         protected Vector3 targetPosition;
-        
         protected readonly IEntityLocomotion locomotionContext;
+        protected readonly IEntityHealth healthContext;
+
+        private bool _isComboWaitActive;
+        private float _comboWaitTimer;
+        private const float ComboWaitDuration = 0.5f;
+
         public override EntityStateCategory StateCategory => EntityStateCategory.Hurt;
 
-        public EntityHurtState(IStateMachine stateMachine, IEntityLocomotion locomotionContext) 
+        public EntityHurtState(IStateMachine stateMachine, IEntityLocomotion locomotionContext, IEntityHealth healthContext) 
             : base(stateMachine)
         {
             this.locomotionContext = locomotionContext;
+            this.healthContext = healthContext;
         }
 
         public void InitializeHurt(DamageData damageData, Vector3 position)
@@ -31,6 +37,7 @@ namespace GyeNyame.Agents.Combat.States
         public override void Enter()
         {
             timer = hurtDuration;
+            _isComboWaitActive = false;
             locomotionContext?.SetFacingDirectionLock(true);
             
             if (locomotionContext == null) return;
@@ -46,7 +53,23 @@ namespace GyeNyame.Agents.Combat.States
             timer -= Time.deltaTime;
 
             if (timer > 0f) return;
+            
             if (currentDamage.KnockupForce > 0f && locomotionContext != null && !locomotionContext.IsGrounded) return;
+
+            if (healthContext != null && healthContext.IsDead)
+            {
+                if (!_isComboWaitActive)
+                {
+                    _isComboWaitActive = true;
+                    _comboWaitTimer = ComboWaitDuration;
+                }
+                
+                _comboWaitTimer -= Time.deltaTime;
+                if (_comboWaitTimer > 0f) return;
+                
+                TransitionToDeath();
+                return;
+            }
             
             TransitionToIdle();
         }
@@ -54,6 +77,11 @@ namespace GyeNyame.Agents.Combat.States
         protected virtual void TransitionToIdle()
         {
             StateMachine.ChangeState(StateMachine.GetOrCreateState<Movement.States.EntityIdleState>());
+        }
+
+        protected virtual void TransitionToDeath()
+        {
+            StateMachine.ChangeState(StateMachine.GetOrCreateState<EntityDeadState>());
         }
 
         public override void FixedUpdate() => locomotionContext?.UpdateMovement(0f, false);

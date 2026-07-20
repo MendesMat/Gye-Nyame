@@ -19,7 +19,7 @@ MonoBehaviour:
   bufferTime: 0.2
   comboWindowTime: 0.2
   cooldownTime: 0.1
-  knockbackForce: 2
+  knockbackForce: 0
   knockupForce: 0
   hitStopTime: 0.1
   screenShakeMultiplier: 0
