@@ -1,10 +1,9 @@
 {
-    "name": "GyeNyame.Player.Movement",
+    "name": "GyeNyame.Entities",
     "rootNamespace": "",
     "references": [
-        "Unity.InputSystem",
         "GyeNyame.Core",
-        "GyeNyame.Entities"
+        "GyeNyame.Combat"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

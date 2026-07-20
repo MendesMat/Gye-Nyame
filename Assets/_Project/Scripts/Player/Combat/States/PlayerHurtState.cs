@@ -1,9 +1,8 @@
 using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.InputBuffer;
 using GyeNyame.Core.Contracts.Interfaces;
-using GyeNyame.Agents.Combat.States;
-using GyeNyame.Player.Movement.States;
-
+using GyeNyame.Entities.Combat.States;
+using GyeNyame.Entities.Movement.States;
 namespace GyeNyame.Player.Combat.States
 {
     public class PlayerHurtState : EntityHurtState
@@ -24,7 +23,7 @@ namespace GyeNyame.Player.Combat.States
 
         protected override void TransitionToIdle()
         {
-            StateMachine.ChangeState(StateMachine.GetOrCreateState<PlayerIdleState>());
+            StateMachine.ChangeState(StateMachine.GetOrCreateState<EntityIdleState>());
         }
 
         protected override void TransitionToDeath()

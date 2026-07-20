@@ -2,8 +2,8 @@ using UnityEngine;
 using GyeNyame.Core.Events;
 using GyeNyame.Core.Contracts.Messages;
 using GyeNyame.Core.StateMachine;
-using GyeNyame.Player.Movement.States;
-using GyeNyame.Agents.Movement;
+using GyeNyame.Entities.Movement;
+using GyeNyame.Entities.Movement.States;
 
 namespace GyeNyame.Player.Movement
 {
@@ -29,13 +29,13 @@ namespace GyeNyame.Player.Movement
         private bool _dashRequested;
         private float _lastDashTime;
 
-        public Vector2 CurrentMoveInput => currentMoveInput;
-        public Vector2 FacingDirection => facingDirection;
+        public override Vector2 CurrentMoveInput => currentMoveInput;
+        public override Vector2 FacingDirection => facingDirection;
 
-        public float AirSpeedMultiplier => airSpeedMultiplier;
-        public bool LockDepthDuringJump => lockDepthDuringJump;
-        public float DashSpeedMultiplier => dashSpeedMultiplier;
-        public float DashDuration => dashDuration;
+        public override float AirSpeedMultiplier => airSpeedMultiplier;
+        public override bool LockDepthDuringJump => lockDepthDuringJump;
+        public override float DashSpeedMultiplier => dashSpeedMultiplier;
+        public override float DashDuration => dashDuration;
 
         protected override void Awake()
         {
@@ -61,16 +61,16 @@ namespace GyeNyame.Player.Movement
 
         private void Start()
         {
-            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerIdleState>());
+            stateMachine.ChangeState(stateMachine.GetOrCreateState<EntityIdleState>());
         }
 
         private void InitializeStateMachine()
         {
-            stateMachine.RegisterState<PlayerIdleState>(new StateFactory<PlayerIdleState>(sm => new PlayerIdleState(sm, this)));
-            stateMachine.RegisterState<PlayerWalkState>(new StateFactory<PlayerWalkState>(sm => new PlayerWalkState(sm, this)));
-            stateMachine.RegisterState<PlayerJumpState>(new StateFactory<PlayerJumpState>(sm => new PlayerJumpState(sm, this)));
-            stateMachine.RegisterState<PlayerFallState>(new StateFactory<PlayerFallState>(sm => new PlayerFallState(sm, this)));
-            stateMachine.RegisterState<PlayerDashState>(new StateFactory<PlayerDashState>(sm => new PlayerDashState(sm, this)));
+            stateMachine.RegisterState<EntityIdleState>(new StateFactory<EntityIdleState>(sm => new EntityIdleState(sm, this)));
+            stateMachine.RegisterState<EntityWalkState>(new StateFactory<EntityWalkState>(sm => new EntityWalkState(sm, this)));
+            stateMachine.RegisterState<EntityJumpState>(new StateFactory<EntityJumpState>(sm => new EntityJumpState(sm, this)));
+            stateMachine.RegisterState<EntityFallState>(new StateFactory<EntityFallState>(sm => new EntityFallState(sm, this)));
+            stateMachine.RegisterState<EntityDashState>(new StateFactory<EntityDashState>(sm => new EntityDashState(sm, this)));
         }
 
         private void OnPlayerMove(PlayerMoveMessage message)
@@ -86,16 +86,16 @@ namespace GyeNyame.Player.Movement
         {
             if (HasMoveInput)
             {
-                stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerWalkState>());
+                stateMachine.ChangeState(stateMachine.GetOrCreateState<EntityWalkState>());
                 return;
             }
             
-            stateMachine.ChangeState(stateMachine.GetOrCreateState<PlayerIdleState>());
+            stateMachine.ChangeState(stateMachine.GetOrCreateState<EntityIdleState>());
         }
 
         private void OnPlayerJump(PlayerJumpMessage message) => _jumpRequested = true;
 
-        public bool ConsumeJumpRequest()
+        public override bool ConsumeJumpRequest()
         {
             if (!_jumpRequested) return false;
 
@@ -103,7 +103,7 @@ namespace GyeNyame.Player.Movement
             return Time.time >= _lastLandTime + jumpCooldown;
         }
 
-        public void ExecuteJump()
+        public override void ExecuteJump()
         {
             verticalVelocity = jumpForce;
             isGrounded = false;
@@ -117,7 +117,7 @@ namespace GyeNyame.Player.Movement
 
         private void OnPlayerDash(PlayerDashMessage message) => _dashRequested = true;
 
-        public bool ConsumeDashRequest()
+        public override bool ConsumeDashRequest()
         {
             if (!_dashRequested) return false;
 
@@ -125,9 +125,9 @@ namespace GyeNyame.Player.Movement
             return Time.time >= _lastDashTime + dashCooldown;
         }
 
-        public void ExecuteDash() => _lastDashTime = Time.time;
+        public override void ExecuteDash() => _lastDashTime = Time.time;
 
-        public void UpdateDirectionalMovement(Vector2 direction, float speedMult)
+        public override void UpdateDirectionalMovement(Vector2 direction, float speedMult)
         {
             var currentPosition = rigidBody.position;
             var directionMovement = new Vector3(direction.x, 0f, direction.y * depthSpeedMultiplier) * speedMult;

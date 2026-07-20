@@ -1,5 +1,5 @@
 using UnityEngine;
-using GyeNyame.Agents.Movement;
+using GyeNyame.Entities.Movement;
 
 namespace GyeNyame.Enemy.Movement
 {

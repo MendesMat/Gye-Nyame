@@ -5,7 +5,8 @@ using GyeNyame.Core.Contracts.Messages;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Core.Events;
 using GyeNyame.Core.StateMachine;
-using GyeNyame.Player.Combat.States;
+using GyeNyame.Entities.Combat.States;
+using GyeNyame.Entities.Movement.States;
 using GyeNyame.Combat.Data;
 using GyeNyame.Combat.Components;
 
@@ -72,8 +73,7 @@ namespace GyeNyame.Player.Combat
         {
             if (_locomotionContext.HasMoveInput) ResetCombo();
 
-            var stateName = stateMachine.CurrentState?.StateName;
-            bool canCombo = stateName == "PlayerIdleState" || stateName == "PlayerWalkState" || IsCancelWindowOpen;
+            bool canCombo = stateMachine.CurrentState is EntityIdleState || stateMachine.CurrentState is EntityWalkState || IsCancelWindowOpen;
             
             if (!canCombo) return;
 
@@ -90,14 +90,14 @@ namespace GyeNyame.Player.Combat
                 {
                     if (Time.time < _cooldownEndTime || lightAttackStarter == null) return;
                     _currentAttackData = lightAttackStarter;
+                    stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericEntityAttackState>());
+                    return;
                 }
-                else
-                {
-                    if (_currentAttackData.NextLightCombo == null) return;
-                    _currentAttackData = _currentAttackData.NextLightCombo;
-                }
+                
+                if (_currentAttackData.NextLightCombo == null) return;
+                _currentAttackData = _currentAttackData.NextLightCombo;
 
-                stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericPlayerAttackState>());
+                stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericEntityAttackState>());
                 return;
             }
 
@@ -109,14 +109,14 @@ namespace GyeNyame.Player.Combat
                 {
                     if (Time.time < _cooldownEndTime || heavyAttackStarter == null) return;
                     _currentAttackData = heavyAttackStarter;
+                    stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericEntityAttackState>());
+                    return;
                 }
-                else
-                {
-                    if (_currentAttackData.NextHeavyCombo == null) return;
-                    _currentAttackData = _currentAttackData.NextHeavyCombo;
-                }
+
+                if (_currentAttackData.NextHeavyCombo == null) return;
+                _currentAttackData = _currentAttackData.NextHeavyCombo;
                 
-                stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericPlayerAttackState>());
+                stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericEntityAttackState>());
             }
         }
 
@@ -131,26 +131,34 @@ namespace GyeNyame.Player.Combat
 
         private void InitializeStateMachine()
         {
-            stateMachine.RegisterState<GenericPlayerAttackState>(new StateFactory<GenericPlayerAttackState>
-                (sm => new GenericPlayerAttackState(sm, this, _locomotionContext)));
+            stateMachine.RegisterState<GenericEntityAttackState>(new StateFactory<GenericEntityAttackState>
+                (sm => new GenericEntityAttackState(sm, this, _locomotionContext)));
         }
 
         private void OnAttackLight(PlayerAttackLightMessage message)
         {
-            float bufferTime = 0.2f;
-            if (_currentAttackData != null && _currentAttackData.NextLightCombo != null) bufferTime = _currentAttackData.NextLightCombo.BufferTime;
-            else if (lightAttackStarter != null) bufferTime = lightAttackStarter.BufferTime;
-            
+            float bufferTime = ResolveLightBufferTime();
             inputBuffer.BufferCommand<PlayerAttackLightMessage>(bufferTime);
+        }
+
+        private float ResolveLightBufferTime()
+        {
+            if (_currentAttackData != null && _currentAttackData.NextLightCombo != null) return _currentAttackData.NextLightCombo.BufferTime;
+            if (lightAttackStarter != null) return lightAttackStarter.BufferTime;
+            return 0.2f;
         }
 
         private void OnAttackHeavy(PlayerAttackHeavyMessage message)
         {
-            float bufferTime = 0.2f;
-            if (_currentAttackData != null && _currentAttackData.NextHeavyCombo != null) bufferTime = _currentAttackData.NextHeavyCombo.BufferTime;
-            else if (heavyAttackStarter != null) bufferTime = heavyAttackStarter.BufferTime;
-            
+            float bufferTime = ResolveHeavyBufferTime();
             inputBuffer.BufferCommand<PlayerAttackHeavyMessage>(bufferTime);
+        }
+
+        private float ResolveHeavyBufferTime()
+        {
+            if (_currentAttackData != null && _currentAttackData.NextHeavyCombo != null) return _currentAttackData.NextHeavyCombo.BufferTime;
+            if (heavyAttackStarter != null) return heavyAttackStarter.BufferTime;
+            return 0.2f;
         }
         
         public void OpenCancelWindow() => IsCancelWindowOpen = true;
@@ -159,7 +167,7 @@ namespace GyeNyame.Player.Combat
 
         public void FinishAttack()
         {
-            if (stateMachine.CurrentState is BasePlayerAttackState attackState)
+            if (stateMachine.CurrentState is BaseEntityAttackState attackState)
             {
                 _lastAttackTime = Time.time;
                 attackState.OnAnimationFinish();
@@ -194,7 +202,7 @@ namespace GyeNyame.Player.Combat
             
             if (!IsCancelWindowOpen) return;
 
-            if (stateMachine.CurrentState is BasePlayerAttackState attackState && attackState.AllowInterrupt)
+            if (stateMachine.CurrentState is BaseEntityAttackState attackState && attackState.AllowInterrupt)
             {
                 IsCancelWindowOpen = false;
                 inputBuffer.Clear();

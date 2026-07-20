@@ -4,8 +4,8 @@ using GyeNyame.Core.Events;
 using GyeNyame.Core.Contracts.Messages;
 using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.Contracts.Interfaces;
-using GyeNyame.Agents.Combat.States;
-using GyeNyame.Agents.Movement.States;
+using GyeNyame.Entities.Combat.States;
+using GyeNyame.Entities.Movement.States;
 
 namespace GyeNyame.Enemy
 {

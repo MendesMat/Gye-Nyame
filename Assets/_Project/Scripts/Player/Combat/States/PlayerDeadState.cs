@@ -3,10 +3,11 @@ using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Core.Events;
 using GyeNyame.Core.Contracts.Messages;
+using GyeNyame.Entities.Combat.States;
 
 namespace GyeNyame.Player.Combat.States
 {
-    public class PlayerDeadState : Agents.Combat.States.EntityDeadState
+    public class PlayerDeadState : EntityDeadState
     {
         private bool _slowMotionFinished;
         private float _slowMotionTimer;

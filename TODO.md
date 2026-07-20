@@ -1,7 +1,5 @@
-Fazer o estado de morte dos agentes
-- Player e inimigos morrem, portanto é um estado de Agents
-- O estado de morte do player, no entanto, terá diferenças, pois precisamos resetar o jogo quando o player morre (após sua animação de morte tocar por inteira, claro)
-- Os Agents, ao tomarem o dano que os levaria a morte, devem esperar o estados de Hurt atual terminar de tocar para, enfim, entrarem no estado de morte e fazerem a animação de morte. O que devemos fazer no caso de um inimigo que está sendo combado pelo player? Continuamos combando, mesmo ele estando sem HP e, ao terminar o combo, verificar um curto tempo sem receber ataque e, aí sim, entrar no estado de morto? Ou quando um inimigo morrer, vamos aplicar um knockback e um knockup e depois, vamos tocar sua animação de morte? Como é feito normalmente na indústria de jogos? Considere um jogo beat 'em up clássico, 2.5D, como streets of Rage. No jogo absolum, por exemplo, o inimigo toma o golpe que o mataria, temos um feedback brilhando em vermelho e, após terminar de ser combado, ele morre. 
-- Durante a animação de morte, o agente em questão não interage com nada, nem pode ser atingido (no caso do player, ele não responde nem aos inputs).
-- No caso de inimigos, ver se devemos desabilita-los ou remove-los. Devemos usar uma pool, uma vez que inimigos vão morrer e outros aparecerão em seus lugares? Considere que estamos falando de um jogo beat 'em up clássico, 2.5D, como streets of Rage.
-- Quando o player morrer, vamos usar um slowmotion durante o ataque que o matou e, parar o slowmotion, e tocar sua animação de morte.
+Vamos começar a fazer todos os estados dos agentes.
+Na pasta Player já temos estados de combate e de movimento.
+Vamos usar os estados do player como base para generalizar os estados, vamos usar o conceito de DRY (Don't Repeat Yourself).
+O ideia é ter esses estados prontos para que eu possa começar a fazer a IA dos inimigos via Behaviour Tree nativo da Unity 6.
+Entenda que player e os inimigos são ambos Agents

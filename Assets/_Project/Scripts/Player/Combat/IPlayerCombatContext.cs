@@ -1,14 +1,11 @@
 using GyeNyame.Core.InputBuffer;
 using GyeNyame.Combat.Data;
 using GyeNyame.Core.Contracts.Interfaces;
+using GyeNyame.Combat.Contracts.Interfaces;
 
 namespace GyeNyame.Player.Combat
 {
-    public interface IPlayerCombatContext
+    public interface IPlayerCombatContext : IEntityCombatContext
     {
-        bool IsCancelWindowOpen { get; }
-        InputBuffer InputBuffer { get; }
-        AttackDataSO CurrentAttackData { get; }
-        void CloseCancelWindow();
     }
 }
