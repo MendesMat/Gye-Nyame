@@ -1,3 +1,4 @@
+using UnityEngine;
 using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Combat.Contracts.Interfaces;
@@ -24,7 +25,7 @@ namespace GyeNyame.Entities.Combat.States
         {
             stateEnterTime = UnityEngine.Time.time;
             locomotionContext?.SetFacingDirectionLock(true);
-            combatContext.CloseCancelWindow();
+            combatContext.ResetCombatState();
         }
 
         public override void FixedUpdate() => locomotionContext?.UpdateMovement(0f, false);
@@ -39,9 +40,9 @@ namespace GyeNyame.Entities.Combat.States
         {
             if (UnityEngine.Time.time - stateEnterTime < 0.1f) return;
             
-            combatContext.CloseCancelWindow();
-            combatContext.InputBuffer.Clear();
-            Core.Events.EventBus.Publish(new EndCombatMessage());
+            combatContext.ResetCombatState();
+            var targetGo = ((MonoBehaviour)combatContext).gameObject;
+            Core.Events.EventBus.Publish(new EndCombatMessage(targetGo));
         }
     }
 }

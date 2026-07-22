@@ -1,5 +1,6 @@
 ﻿<Solution>
   <Project Path="GyeNyame.Core.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="GyeNyame.Entities.csproj" />
   <Project Path="GyeNyame.Enemy.csproj" />
   <Project Path="GyeNyame.Combat.csproj" />

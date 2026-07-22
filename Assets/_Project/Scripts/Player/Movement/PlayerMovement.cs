@@ -84,6 +84,8 @@ namespace GyeNyame.Player.Movement
 
         private void OnEndCombatMessage(EndCombatMessage message)
         {
+            if (message.Entity != gameObject) return;
+            
             if (HasMoveInput)
             {
                 stateMachine.ChangeState(stateMachine.GetOrCreateState<EntityWalkState>());

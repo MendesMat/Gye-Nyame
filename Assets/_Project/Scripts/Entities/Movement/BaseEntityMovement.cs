@@ -55,6 +55,12 @@ namespace GyeNyame.Entities.Movement
             UpdateFacingDirection();
         }
 
+        public void ForceFacingDirectionX(float dirX)
+        {
+            if (dirX == 0f) return;
+            facingDirectionX = Mathf.Sign(dirX);
+        }
+
         public virtual void DisablePhysics()
         {
             if (rigidBody != null)

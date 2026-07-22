@@ -11,14 +11,11 @@ namespace GyeNyame.Entities.Combat.States
 
         public GenericEntityAttackState(IStateMachine stateMachine, IEntityCombatContext combatContext, IEntityLocomotion locomotionContext) 
             : base(stateMachine, combatContext, locomotionContext)
-        {
-        }
+        { }
 
         public override void Enter()
         {
             base.Enter();
-            combatContext.InputBuffer.ConsumeCommand<PlayerAttackLightMessage>();
-            combatContext.InputBuffer.ConsumeCommand<PlayerAttackHeavyMessage>();
         }
 
         public override void Update() { }

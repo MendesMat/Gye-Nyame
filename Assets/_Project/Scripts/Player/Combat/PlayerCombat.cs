@@ -71,9 +71,10 @@ namespace GyeNyame.Player.Combat
 
         private void Update()
         {
-            if (_locomotionContext.HasMoveInput) ResetCombo();
+            bool isAttacking = stateMachine.CurrentState is BaseEntityAttackState;
+            if (_locomotionContext.HasMoveInput && !isAttacking) ResetCombo();
 
-            bool canCombo = stateMachine.CurrentState is EntityIdleState || stateMachine.CurrentState is EntityWalkState || IsCancelWindowOpen;
+            bool canCombo = stateMachine.CurrentState is EntityIdleState || stateMachine.CurrentState is EntityWalkState;
             
             if (!canCombo) return;
 
@@ -163,7 +164,12 @@ namespace GyeNyame.Player.Combat
         
         public void OpenCancelWindow() => IsCancelWindowOpen = true;
         
-        public void CloseCancelWindow() => IsCancelWindowOpen = false;
+        public void ResetCombatState()
+        {
+            IsCancelWindowOpen = false;
+            if (inputBuffer == null) return;
+            inputBuffer.Clear();
+        }
 
         public void FinishAttack()
         {
@@ -206,7 +212,7 @@ namespace GyeNyame.Player.Combat
             {
                 IsCancelWindowOpen = false;
                 inputBuffer.Clear();
-                EventBus.Publish(new EndCombatMessage());
+                EventBus.Publish(new EndCombatMessage(gameObject));
             }
         }
     }

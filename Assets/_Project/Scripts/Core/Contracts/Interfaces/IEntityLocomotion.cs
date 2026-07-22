@@ -17,6 +17,7 @@ namespace GyeNyame.Core.Contracts.Interfaces
 
         void UpdateMovement(float speedMultiplier, bool lockDepth);
         void SetFacingDirectionLock(bool isLocked);
+        void ForceFacingDirectionX(float dirX);
         void DisablePhysics();
         void ApplyExternalForce(Vector3 direction, float force, float verticalVelocity);
         bool ConsumeJumpRequest();

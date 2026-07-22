@@ -112,3 +112,4 @@ Directory.Build.props
 
 # User Personal Settings
 .agents/
+.planning/
