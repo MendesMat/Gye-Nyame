@@ -26,7 +26,7 @@ namespace GyeNyame.AI.Nodes
         [SerializeReference] public BlackboardVariable<float> SpeedSmoothingDistance = new(0.5f);
 
         private IEnemyMovement _enemyMovement;
-        private IEntityLocomotion _locomotion;
+        private IEntityLocomotion _entityLocomotion;
         private IAttackDirector _director;
 
         private float _lastRecalculationTime;
@@ -41,9 +41,7 @@ namespace GyeNyame.AI.Nodes
             _enemyMovement = Agent.Value.GetComponent<IEnemyMovement>();
             if (_enemyMovement == null) return Status.Failure;
 
-            _locomotion = Agent.Value.GetComponent<IEntityLocomotion>();
-            if (_locomotion == null) return Status.Failure;
-            _locomotion.SetFacingDirectionLock(true);
+            _entityLocomotion = Agent.Value.GetComponent<IEntityLocomotion>();
 
             _director = Director.Value.GetComponent<IAttackDirector>();
             if (_director == null) return Status.Failure;
@@ -52,12 +50,16 @@ namespace GyeNyame.AI.Nodes
             _reactionDelay = UnityEngine.Random.Range(MinReactionDelay.Value, MaxReactionDelay.Value);
             _lastRecalculationTime = Time.time;
 
+            LockFacingDirection();
+
             EventBus.Publish(new AINodeStateMessage(Agent.Value, "ApproachCombatSlot", "Iniciou Aproximação"));
             return Status.Running;
         }
 
         protected override Status OnUpdate()
         {
+            LockFacingDirection();
+
             if (_director.IsInAttackRange(Agent.Value))
             {
                 _enemyMovement.SetMovementIntent(Vector2.zero);
@@ -71,9 +73,31 @@ namespace GyeNyame.AI.Nodes
 
         protected override void OnEnd()
         {
-            if (_locomotion != null) _locomotion.SetFacingDirectionLock(false);
-            if (_enemyMovement == null) return;
-            _enemyMovement.SetMovementIntent(Vector2.zero);
+            if (_enemyMovement != null)
+            {
+                _enemyMovement.SetMovementIntent(Vector2.zero);
+            }
+
+            UnlockFacingDirection();
+        }
+
+        private void LockFacingDirection()
+        {
+            if (_director == null) return;
+            if (_entityLocomotion == null) return;
+            
+            var playerTransform = _director.GetPlayerTransform();
+            if (playerTransform == null) return;
+
+            float directionX = playerTransform.position.x - Agent.Value.transform.position.x;
+            _entityLocomotion.SetFacingDirectionLock(true);
+            _entityLocomotion.ForceFacingDirectionX(directionX);
+        }
+
+        private void UnlockFacingDirection()
+        {
+            if (_entityLocomotion == null) return;
+            _entityLocomotion.SetFacingDirectionLock(false);
         }
 
         private Status NavigateTowardsCachedSlot()
@@ -112,12 +136,6 @@ namespace GyeNyame.AI.Nodes
             _cachedTargetSlot = _director.GetAvailablePositionSlot(Agent.Value);
             _reactionDelay = UnityEngine.Random.Range(MinReactionDelay.Value, MaxReactionDelay.Value);
             _lastRecalculationTime = Time.time;
-
-            Transform playerTransform = _director.GetPlayerTransform();
-            if (playerTransform == null) return;
-
-            Vector3 current = Agent.Value.transform.position;
-            _locomotion.ForceFacingDirectionX(playerTransform.position.x - current.x);
         }
     }
 }

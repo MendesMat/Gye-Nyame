@@ -413,7 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Enemy::GyeNyame.Enemy.Combat.EnemyCombat
   stateMachine: {fileID: 192263857}
   attackData: {fileID: 11400000, guid: ae56b3eae62f045418cee1a0983096a5, type: 2}
-  hitboxComponent: {fileID: 2122605547}
+  combatDirector: {fileID: 1320016226}
 --- !u!114 &192263854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2192,7 +2192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Enemy::GyeNyame.Enemy.Combat.EnemyCombat
   stateMachine: {fileID: 1284654825}
   attackData: {fileID: 11400000, guid: ae56b3eae62f045418cee1a0983096a5, type: 2}
-  hitboxComponent: {fileID: 947300860}
+  combatDirector: {fileID: 1320016226}
 --- !u!114 &1284654831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2265,7 +2265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Components.CombatDirector
   playerTransform: {fileID: 1082542546}
   maxSimultaneousAttacks: 2
-  slotDistance: 1
+  slotDistance: 0.75
 --- !u!1 &1356795141
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,7 +2333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Enemy::GyeNyame.Enemy.Combat.EnemyCombat
   stateMachine: {fileID: 1356795148}
   attackData: {fileID: 11400000, guid: ae56b3eae62f045418cee1a0983096a5, type: 2}
-  hitboxComponent: {fileID: 732626855}
+  combatDirector: {fileID: 1320016226}
 --- !u!114 &1356795145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2973,7 +2973,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: GyeNyame.Enemy::GyeNyame.Enemy.Combat.EnemyCombat
   stateMachine: {fileID: 1761001101}
   attackData: {fileID: 11400000, guid: ae56b3eae62f045418cee1a0983096a5, type: 2}
-  hitboxComponent: {fileID: 1387745513}
+  combatDirector: {fileID: 1320016226}
 --- !u!114 &1761001098
 MonoBehaviour:
   m_ObjectHideFlags: 0

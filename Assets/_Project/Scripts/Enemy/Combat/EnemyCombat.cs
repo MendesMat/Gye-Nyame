@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Core.StateMachine;
@@ -13,9 +14,12 @@ namespace GyeNyame.Enemy.Combat
     {
         [SerializeField] private StateMachine stateMachine;
         [SerializeField] private AttackDataSO attackData;
-        [SerializeField] private HitboxComponent hitboxComponent;
+        [SerializeField] private CombatDirector combatDirector;
+
+        private readonly Dictionary<AttackDataSO, IHitbox> _hitboxMap = new();
 
         private IEntityLocomotion _locomotionContext;
+        private IAttackDirector _attackDirector;
         private float _cooldownEndTime;
 
         public bool IsCancelWindowOpen { get; private set; }
@@ -26,7 +30,25 @@ namespace GyeNyame.Enemy.Combat
         private void Awake()
         {
             _locomotionContext = GetComponent<IEntityLocomotion>();
+            _attackDirector = combatDirector;
+
+            if (_attackDirector == null)
+            {
+                _attackDirector = FindAnyObjectByType<CombatDirector>();
+            }
+            
+            InitializeHitboxes();
             InitializeStateMachine();
+        }
+
+        private void InitializeHitboxes()
+        {
+            HitboxComponent[] hitboxes = GetComponentsInChildren<HitboxComponent>(true);
+            foreach (HitboxComponent hitbox in hitboxes)
+            {
+                if (hitbox.BoundAttackData == null) continue;
+                _hitboxMap[hitbox.BoundAttackData] = hitbox;
+            }
         }
 
         private void InitializeStateMachine()
@@ -35,8 +57,19 @@ namespace GyeNyame.Enemy.Combat
                 (sm => new GenericEntityAttackState(sm, this, _locomotionContext)));
         }
 
+        private void OnEnable()
+        {
+            _attackDirector?.RegisterAttacker(gameObject);
+        }
+
+        private void OnDisable()
+        {
+            _attackDirector?.UnregisterAttacker(gameObject);
+        }
+
         public void TryAttack()
         {
+            if (IsInCooldown) return;
             if (stateMachine.CurrentState is BaseEntityAttackState) return;
 
             stateMachine.ChangeState(stateMachine.GetOrCreateState<GenericEntityAttackState>());
@@ -63,14 +96,14 @@ namespace GyeNyame.Enemy.Combat
 
         public void OpenHitbox()
         {
-            if (hitboxComponent == null) return;
-            hitboxComponent.EnableHitbox();
+            if (!_hitboxMap.TryGetValue(attackData, out IHitbox hitbox)) return;
+            hitbox.EnableHitbox();
         }
 
         public void CloseHitbox()
         {
-            if (hitboxComponent == null) return;
-            hitboxComponent.DisableHitbox();
+            if (!_hitboxMap.TryGetValue(attackData, out IHitbox hitbox)) return;
+            hitbox.DisableHitbox();
         }
     }
 }

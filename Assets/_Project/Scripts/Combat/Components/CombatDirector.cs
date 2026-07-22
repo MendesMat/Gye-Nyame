@@ -12,19 +12,67 @@ namespace GyeNyame.Combat.Components
 
         private readonly HashSet<int> _activeAttackers = new();
         private readonly Dictionary<int, Vector2> _enemyNoises = new();
+        private readonly HashSet<GameObject> _registeredAttackers = new();
 
         public Transform GetPlayerTransform() => playerTransform;
+
+        public void RegisterAttacker(GameObject enemy)
+        {
+            _registeredAttackers.Add(enemy);
+        }
+
+        public void UnregisterAttacker(GameObject enemy)
+        {
+            _registeredAttackers.Remove(enemy);
+            ReleaseAttackToken(enemy.GetInstanceID());
+        }
 
         public bool RequestAttackToken(GameObject enemy)
         {
             int enemyId = enemy.GetInstanceID();
 
-            if (HasActiveCooldown(enemy)) return false;
             if (_activeAttackers.Contains(enemyId)) return true;
-            if (_activeAttackers.Count >= maxSimultaneousAttacks) return false;
+            if (HasActiveCooldown(enemy)) return false;
 
-            _activeAttackers.Add(enemyId);
-            return true;
+            int rank = GetAttackerRankByDistance(enemy);
+
+            if (rank < maxSimultaneousAttacks && _activeAttackers.Count < maxSimultaneousAttacks)
+            {
+                _activeAttackers.Add(enemyId);
+                return true;
+            }
+
+            return false;
+        }
+
+        private int GetAttackerRankByDistance(GameObject targetEnemy)
+        {
+            int rank = 0;
+            Vector3 playerPosition = playerTransform.position;
+            float targetDistance = Vector3.Distance(playerPosition, targetEnemy.transform.position);
+            int targetId = targetEnemy.GetInstanceID();
+
+            foreach (GameObject attacker in _registeredAttackers)
+            {
+                if (attacker == targetEnemy) continue;
+                if (attacker == null) continue;
+                if (HasActiveCooldown(attacker)) continue;
+
+                float attackerDistance = Vector3.Distance(playerPosition, attacker.transform.position);
+                
+                if (attackerDistance < targetDistance)
+                {
+                    rank++;
+                    continue;
+                }
+
+                if (Mathf.Approximately(attackerDistance, targetDistance) && attacker.GetInstanceID() < targetId)
+                {
+                    rank++;
+                }
+            }
+
+            return rank;
         }
 
         private bool HasActiveCooldown(GameObject enemy)
