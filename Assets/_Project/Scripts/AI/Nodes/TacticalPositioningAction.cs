@@ -21,6 +21,7 @@ namespace GyeNyame.AI.Nodes
         private const float DefaultDirectionX = 1f;
         private const float DefaultMinLateralOffset = -3f;
         private const float DefaultMaxLateralOffset = 3f;
+        private const float DefaultAntiClusteringNoise = 0.5f;
         
         private const string EventStateStarted = "Tactical positioning started";
         private const string EventStateTimeout = "Success - Time elapsed";
@@ -29,10 +30,12 @@ namespace GyeNyame.AI.Nodes
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<GameObject> Director;
         [SerializeReference] public BlackboardVariable<float> RepositionDuration = new();
-        [SerializeReference] public BlackboardVariable<float> StandbyDistance = new();
+        [SerializeReference] public BlackboardVariable<float> MinStandbyDistance = new();
+        [SerializeReference] public BlackboardVariable<float> MaxStandbyDistance = new();
         [SerializeReference] public BlackboardVariable<float> ArrivalTolerance = new();
         [SerializeReference] public BlackboardVariable<float> MinLateralOffset = new(DefaultMinLateralOffset);
         [SerializeReference] public BlackboardVariable<float> MaxLateralOffset = new(DefaultMaxLateralOffset);
+        [SerializeReference] public BlackboardVariable<float> AntiClusteringNoise = new(DefaultAntiClusteringNoise);
 
         private IEnemyMovement _enemyMovement;
         private IEntityLocomotion _entityLocomotion;
@@ -41,6 +44,7 @@ namespace GyeNyame.AI.Nodes
         private Vector3 _tacticalDestination;
         private float _timeStarted;
         private float _lateralOffset;
+        private float _chosenTargetDistance;
 
         protected override Status OnStart()
         {
@@ -62,8 +66,6 @@ namespace GyeNyame.AI.Nodes
             LockFacingDirection();
 
             if (IsRepositionTimeElapsed()) return HandleTimeout();
-
-            UpdateTacticalDestination();
             
             if (HasArrivedAtDestination()) return HandleArrival();
 
@@ -105,8 +107,14 @@ namespace GyeNyame.AI.Nodes
         private void InitializeState()
         {
             _timeStarted = Time.time;
+            CalculateTargetDistance();
             CalculateLateralOffset();
             UpdateTacticalDestination();
+        }
+
+        private void CalculateTargetDistance()
+        {
+            _chosenTargetDistance = UnityEngine.Random.Range(MinStandbyDistance.Value, MaxStandbyDistance.Value);
         }
 
         private void CalculateLateralOffset()
@@ -161,9 +169,20 @@ namespace GyeNyame.AI.Nodes
 
         private void UpdateTacticalDestination()
         {
-            Transform playerTransform = _director.GetPlayerTransform();
+            float noiseRange = AntiClusteringNoise?.Value ?? ZeroValue;
+            float noiseX = UnityEngine.Random.Range(-noiseRange, noiseRange);
+            float noiseZ = UnityEngine.Random.Range(-noiseRange, noiseRange);
+
+            float targetX = CalculateDepthTargetX() + noiseX;
+            float targetZ = CalculateLateralTargetZ() + noiseZ;
             
-            if (playerTransform == null) return;
+            _tacticalDestination = new Vector3(targetX, Agent.Value.transform.position.y, targetZ);
+        }
+
+        private float CalculateDepthTargetX()
+        {
+            Transform playerTransform = _director.GetPlayerTransform();
+            if (playerTransform == null) return Agent.Value.transform.position.x;
 
             Vector3 agentPosition = Agent.Value.transform.position;
             Vector3 playerPosition = playerTransform.position;
@@ -171,10 +190,15 @@ namespace GyeNyame.AI.Nodes
             float directionX = Mathf.Sign(agentPosition.x - playerPosition.x);
             if (directionX == ZeroValue) directionX = DefaultDirectionX;
 
-            float targetX = playerPosition.x + (directionX * StandbyDistance.Value);
-            float targetZ = playerPosition.z + _lateralOffset;
+            return playerPosition.x + (directionX * _chosenTargetDistance);
+        }
 
-            _tacticalDestination = new Vector3(targetX, agentPosition.y, targetZ);
+        private float CalculateLateralTargetZ()
+        {
+            Transform playerTransform = _director.GetPlayerTransform();
+            if (playerTransform == null) return Agent.Value.transform.position.z;
+
+            return playerTransform.position.z + _lateralOffset;
         }
 
         private bool HasArrivedAtDestination()

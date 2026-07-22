@@ -11,15 +11,18 @@ namespace GyeNyame.AI.Nodes
 {
     [Serializable, GeneratePropertyBag]
     [NodeDescription(
-        name: "CheckAttackToken", 
-        story: "Check if [Agent] can get token from [Director]", 
-        category: "Action", 
+        name: "AcquireAttackToken",
+        story: "[Agent] acquires attack token from [Director]",
+        category: "Action",
         id: "33ea87ee0436ddca1af0cf3753e47337")]
-    public partial class CheckAttackTokenAction : Action
+    public partial class AcquireAttackTokenAction : Action
     {
+        private const string EventTokenAcquired = "Token acquired";
+        private const string EventTokenDenied = "Token denied";
+
         [SerializeReference] public BlackboardVariable<GameObject> Agent;
         [SerializeReference] public BlackboardVariable<GameObject> Director;
-        
+
         protected override Status OnStart()
         {
             if (Agent.Value == null) return Status.Failure;
@@ -28,16 +31,21 @@ namespace GyeNyame.AI.Nodes
             var director = Director.Value.GetComponent<IAttackDirector>();
             if (director == null) return Status.Failure;
 
-            if (director.RequestAttackToken(Agent.Value))
+            if (!director.RequestAttackToken(Agent.Value))
             {
-                EventBus.Publish(new AINodeStateMessage(Agent.Value, "CheckAttackToken", "Sucesso - Token Adquirido"));
-                return Status.Success;
+                PublishState(EventTokenDenied);
+                return Status.Failure;
             }
-            
-            EventBus.Publish(new AINodeStateMessage(Agent.Value, "CheckAttackToken", "Falhou - Sem Token"));
-            return Status.Failure;
+
+            PublishState(EventTokenAcquired);
+            return Status.Success;
         }
 
         protected override Status OnUpdate() => Status.Success;
+
+        private void PublishState(string message)
+        {
+            EventBus.Publish(new AINodeStateMessage(Agent.Value, nameof(AcquireAttackTokenAction), message));
+        }
     }
 }

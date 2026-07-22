@@ -7,6 +7,7 @@ namespace GyeNyame.Core.Contracts.Interfaces
         Transform GetPlayerTransform();
         void RegisterAttacker(GameObject enemy);
         void UnregisterAttacker(GameObject enemy);
+        bool IsTokenAvailableFor(GameObject enemy);
         bool RequestAttackToken(GameObject enemy);
         void ReleaseAttackToken(int enemyId);
         Vector3 GetAvailablePositionSlot(GameObject enemy);

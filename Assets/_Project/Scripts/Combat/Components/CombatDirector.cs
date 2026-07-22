@@ -27,6 +27,18 @@ namespace GyeNyame.Combat.Components
             ReleaseAttackToken(enemy.GetInstanceID());
         }
 
+        public bool IsTokenAvailableFor(GameObject enemy)
+        {
+            int enemyId = enemy.GetInstanceID();
+
+            if (_activeAttackers.Contains(enemyId)) return true;
+            if (HasActiveCooldown(enemy)) return false;
+
+            int rank = GetAttackerRankByDistance(enemy);
+
+            return rank < maxSimultaneousAttacks && _activeAttackers.Count < maxSimultaneousAttacks;
+        }
+
         public bool RequestAttackToken(GameObject enemy)
         {
             int enemyId = enemy.GetInstanceID();
