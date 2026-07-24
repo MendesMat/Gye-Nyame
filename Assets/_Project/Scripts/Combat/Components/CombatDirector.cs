@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GyeNyame.Core.Contracts.Interfaces;
+using GyeNyame.Core.Events;
+using GyeNyame.Core.Contracts.Messages;
 
 namespace GyeNyame.Combat.Components
 {
@@ -13,6 +15,7 @@ namespace GyeNyame.Combat.Components
         private readonly HashSet<int> _activeAttackers = new();
         private readonly Dictionary<int, Vector2> _enemyNoises = new();
         private readonly HashSet<GameObject> _registeredAttackers = new();
+        private bool _isPlayerDead;
 
         public Transform GetPlayerTransform() => playerTransform;
 
@@ -29,6 +32,8 @@ namespace GyeNyame.Combat.Components
 
         public bool IsTokenAvailableFor(GameObject enemy)
         {
+            if (_isPlayerDead) return false;
+
             int enemyId = enemy.GetInstanceID();
 
             if (_activeAttackers.Contains(enemyId)) return true;
@@ -41,6 +46,8 @@ namespace GyeNyame.Combat.Components
 
         public bool RequestAttackToken(GameObject enemy)
         {
+            if (_isPlayerDead) return false;
+
             int enemyId = enemy.GetInstanceID();
 
             if (_activeAttackers.Contains(enemyId)) return true;
@@ -97,6 +104,7 @@ namespace GyeNyame.Combat.Components
 
         public Vector3 GetAvailablePositionSlot(GameObject enemy)
         {
+            if (_isPlayerDead) return Vector3.zero;
             if (playerTransform == null || enemy == null) return Vector3.zero;
 
             int enemyId = enemy.GetInstanceID();
@@ -126,5 +134,22 @@ namespace GyeNyame.Combat.Components
         }
 
         public void ReleasePositionSlot(int enemyId) => _enemyNoises.Remove(enemyId);
+
+        private void OnEnable()
+        {
+            EventBus.Subscribe<PlayerDiedMessage>(OnPlayerDied);
+        }
+
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<PlayerDiedMessage>(OnPlayerDied);
+        }
+
+        private void OnPlayerDied(PlayerDiedMessage message)
+        {
+            _isPlayerDead = true;
+            _activeAttackers.Clear();
+            _enemyNoises.Clear();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using GyeNyame.Core.Events;
 using GyeNyame.Core.Contracts.Messages;
@@ -13,6 +13,7 @@ namespace GyeNyame.Player.Input
 
         private void OnEnable()
         {
+            EventBus.Subscribe<PlayerDiedMessage>(OnPlayerDied);
             _inputActions.Player.Enable();
 
             _inputActions.Player.Move.performed += OnMovePerformed;
@@ -25,6 +26,7 @@ namespace GyeNyame.Player.Input
 
         private void OnDisable()
         {
+            EventBus.Unsubscribe<PlayerDiedMessage>(OnPlayerDied);
             _inputActions.Player.Move.performed -= OnMovePerformed;
             _inputActions.Player.Move.canceled -= OnMoveCanceled;
             _inputActions.Player.Jump.performed -= OnJumpPerformed;
@@ -66,6 +68,11 @@ namespace GyeNyame.Player.Input
         {
             _inputActions.Player.Disable();
             _inputActions.UI.Enable();
+        }
+
+        private void OnPlayerDied(PlayerDiedMessage message)
+        {
+            SwitchToUIMode();
         }
     }
 }

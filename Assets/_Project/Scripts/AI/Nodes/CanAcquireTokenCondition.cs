@@ -3,25 +3,28 @@ using Unity.Behavior;
 using UnityEngine;
 using GyeNyame.Core.Contracts.Interfaces;
 
-[Serializable, Unity.Properties.GeneratePropertyBag]
-[Condition(
-    name: "CanAcquireToken", 
-    story: "Checks if [Agent] can get token from [Director]", 
-    category: "Conditions", 
-    id: "17dee9708f7f3abed890cc34279e13d7")]
-public partial class CanAcquireTokenCondition : Condition
+namespace GyeNyame.AI.Nodes
 {
-    [SerializeReference] public BlackboardVariable<GameObject> Agent;
-    [SerializeReference] public BlackboardVariable<GameObject> Director;
-
-    public override bool IsTrue()
+    [Serializable, Unity.Properties.GeneratePropertyBag]
+    [Condition(
+        name: "CanAcquireToken", 
+        story: "Checks if [Agent] can get token from [Director]", 
+        category: "Conditions", 
+        id: "17dee9708f7f3abed890cc34279e13d7")]
+    public partial class CanAcquireTokenCondition : Condition
     {
-        if (Agent == null || Agent.Value == null) return false;
-        if (Director == null || Director.Value == null) return false;
-        
-        IAttackDirector director = Director.Value.GetComponent<IAttackDirector>();
-        if (director == null) return false;
+        [SerializeReference] public BlackboardVariable<GameObject> Agent;
+        [SerializeReference] public BlackboardVariable<GameObject> Director;
 
-        return director.IsTokenAvailableFor(Agent.Value);
+        public override bool IsTrue()
+        {
+            if (Agent == null || Agent.Value == null) return false;
+            if (Director == null || Director.Value == null) return false;
+            
+            IAttackDirector director = Director.Value.GetComponent<IAttackDirector>();
+            if (director == null) return false;
+
+            return director.IsTokenAvailableFor(Agent.Value);
+        }
     }
 }

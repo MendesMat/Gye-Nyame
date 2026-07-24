@@ -33,11 +33,13 @@ namespace GyeNyame.Enemy
         protected virtual void OnEnable()
         {
             EventBus.Subscribe<EntityDamagedMessage>(OnEntityDamaged);
+            EventBus.Subscribe<PlayerDiedMessage>(OnPlayerDied);
         }
 
         protected virtual void OnDisable()
         {
             EventBus.Unsubscribe<EntityDamagedMessage>(OnEntityDamaged);
+            EventBus.Unsubscribe<PlayerDiedMessage>(OnPlayerDied);
         }
 
         private void OnEntityDamaged(EntityDamagedMessage message)
@@ -51,6 +53,11 @@ namespace GyeNyame.Enemy
             var hurtState = stateMachine.GetOrCreateState<EntityHurtState>();
             hurtState.InitializeHurt(data, transform.root.position);
             stateMachine.ChangeState(hurtState);
+        }
+
+        private void OnPlayerDied(PlayerDiedMessage message)
+        {
+            stateMachine.ChangeState(stateMachine.GetOrCreateState<EntityIdleState>());
         }
     }
 }

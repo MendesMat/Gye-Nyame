@@ -1761,7 +1761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2225783902bc9c4e8cc84d1c092d07c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Stats.PlayerHealth
-  maxHealth: 100
+  maxHealth: 3
   deadLayerName: Dead
   _stateMachine: {fileID: 1082542550}
 --- !u!1 &1082542542

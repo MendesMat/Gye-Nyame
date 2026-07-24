@@ -1,0 +1,17 @@
+{
+    "name": "GyeNyame.AI",
+    "references": [
+        "GyeNyame.Core",
+        "Unity.Behavior",
+        "Unity.Properties"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

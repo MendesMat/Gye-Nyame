@@ -85,7 +85,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: ExecuteAttack
     Story: Agent [Agent] executes attack
-    RuntimeTypeString: GyeNyame.AI.Nodes.ExecuteAttackAction, Assembly-CSharp, Version=0.0.0.0,
+    RuntimeTypeString: GyeNyame.AI.Nodes.ExecuteAttackAction, GyeNyame.AI, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 189119925906656
@@ -100,7 +100,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: CheckAttackRange
     Story: 'Checks if [Agent] is in attack range of Player via [Director]'
-    RuntimeTypeString: GyeNyame.AI.Nodes.CheckAttackRangeAction, Assembly-CSharp,
+    RuntimeTypeString: GyeNyame.AI.Nodes.CheckAttackRangeAction, GyeNyame.AI,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 1053843051539786944
@@ -120,7 +120,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: ApproachCombatSlot
     Story: 'Agent [Agent] smoothly approaches dynamic slot from [Director]'
-    RuntimeTypeString: GyeNyame.AI.Nodes.ApproachCombatSlotAction, Assembly-CSharp,
+    RuntimeTypeString: GyeNyame.AI.Nodes.ApproachCombatSlotAction, GyeNyame.AI,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 3221880992
@@ -165,7 +165,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: Hesitate
     Story: Agent [Agent] hesitates before acting
-    RuntimeTypeString: GyeNyame.AI.Nodes.HesitateAction, Assembly-CSharp, Version=0.0.0.0,
+    RuntimeTypeString: GyeNyame.AI.Nodes.HesitateAction, GyeNyame.AI, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 211149417742350
@@ -195,7 +195,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: TacticalPositioning
     Story: 'Agent [Agent] repositions tactically away from [Director]'
-    RuntimeTypeString: GyeNyame.AI.Nodes.TacticalPositioningAction, Assembly-CSharp,
+    RuntimeTypeString: GyeNyame.AI.Nodes.TacticalPositioningAction, GyeNyame.AI,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 2685190154
@@ -250,7 +250,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: ProbabilisticTokenRelease
     Story: 'Agent [Agent] probabilistically releases token to [Director]'
-    RuntimeTypeString: GyeNyame.AI.Nodes.ProbabilisticTokenReleaseAction, Assembly-CSharp,
+    RuntimeTypeString: GyeNyame.AI.Nodes.ProbabilisticTokenReleaseAction, GyeNyame.AI,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 1062849512070646528
@@ -280,7 +280,7 @@ MonoBehaviour:
     IsPlaceholder: 0
   - Name: AcquireAttackToken
     Story: '[Agent] acquires attack token from [Director]'
-    RuntimeTypeString: GyeNyame.AI.Nodes.AcquireAttackTokenAction, Assembly-CSharp,
+    RuntimeTypeString: GyeNyame.AI.Nodes.AcquireAttackTokenAction, GyeNyame.AI,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 14617899360324151859
@@ -598,7 +598,7 @@ MonoBehaviour:
         - rid: 5023280987739259426
         - rid: 5023280987739259427
         NodeType:
-          m_SerializableType: GyeNyame.AI.Nodes.ExecuteAttackAction, Assembly-CSharp,
+          m_SerializableType: GyeNyame.AI.Nodes.ExecuteAttackAction, GyeNyame.AI,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 189119925906656
@@ -704,7 +704,7 @@ MonoBehaviour:
         - rid: 5023280998349013073
         - rid: 5023280998349013074
         NodeType:
-          m_SerializableType: GyeNyame.AI.Nodes.CheckAttackRangeAction, Assembly-CSharp,
+          m_SerializableType: GyeNyame.AI.Nodes.CheckAttackRangeAction, GyeNyame.AI,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 1053843051539786944
@@ -802,7 +802,7 @@ MonoBehaviour:
         - rid: 5023281010614468858
         - rid: 5023281010614468859
         NodeType:
-          m_SerializableType: GyeNyame.AI.Nodes.ApproachCombatSlotAction, Assembly-CSharp,
+          m_SerializableType: GyeNyame.AI.Nodes.ApproachCombatSlotAction, GyeNyame.AI,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 3221880992
@@ -1010,7 +1010,7 @@ MonoBehaviour:
         - rid: 5023281010614469064
         - rid: 5023281010614469065
         NodeType:
-          m_SerializableType: GyeNyame.AI.Nodes.HesitateAction, Assembly-CSharp,
+          m_SerializableType: GyeNyame.AI.Nodes.HesitateAction, GyeNyame.AI,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 211149417742350
@@ -1109,7 +1109,7 @@ MonoBehaviour:
         - rid: 5023281010614469440
         - rid: 5023281010614469441
         NodeType:
-          m_SerializableType: GyeNyame.AI.Nodes.TacticalPositioningAction, Assembly-CSharp,
+          m_SerializableType: GyeNyame.AI.Nodes.TacticalPositioningAction, GyeNyame.AI,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 2685190154
@@ -1252,7 +1252,7 @@ MonoBehaviour:
         - rid: 5023281010614469603
         - rid: 5023281010614469604
         NodeType:
-          m_SerializableType: GyeNyame.AI.Nodes.HesitateAction, Assembly-CSharp,
+          m_SerializableType: GyeNyame.AI.Nodes.HesitateAction, GyeNyame.AI,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 211149417742350
@@ -1360,7 +1360,7 @@ MonoBehaviour:
         - rid: 5023281013587705981
         - rid: 5023281013587705982
         NodeType:
-          m_SerializableType: GyeNyame.AI.Nodes.HesitateAction, Assembly-CSharp,
+          m_SerializableType: GyeNyame.AI.Nodes.HesitateAction, GyeNyame.AI,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 211149417742350
@@ -1526,7 +1526,7 @@ MonoBehaviour:
         - rid: 5023281013587706381
         NodeType:
           m_SerializableType: GyeNyame.AI.Nodes.ProbabilisticTokenReleaseAction,
-            Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+            GyeNyame.AI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 1062849512070646528
           m_Value1: 60144263182
@@ -1752,7 +1752,7 @@ MonoBehaviour:
       type: {class: ConditionModel, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
       data:
         ConditionType:
-          m_SerializableType: CanAcquireTokenCondition, Assembly-CSharp, Version=0.0.0.0,
+          m_SerializableType: GyeNyame.AI.Nodes.CanAcquireTokenCondition, GyeNyame.AI, Version=0.0.0.0,
             Culture=neutral, PublicKeyToken=null
         ConditionTypeID:
           m_Value0: 13707408669906951703
@@ -1834,7 +1834,7 @@ MonoBehaviour:
         - rid: 5023281015877534518
         - rid: 5023281015877534519
         NodeType:
-          m_SerializableType: GyeNyame.AI.Nodes.AcquireAttackTokenAction, Assembly-CSharp,
+          m_SerializableType: GyeNyame.AI.Nodes.AcquireAttackTokenAction, GyeNyame.AI,
             Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         NodeTypeID:
           m_Value0: 14617899360324151859
@@ -2195,7 +2195,7 @@ MonoBehaviour:
         - rid: 5023281015877534619
         m_RegisteredObservers: []
     - rid: 5023281015877534614
-      type: {class: HesitateAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: HesitateAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 13702532829269619395
@@ -2238,7 +2238,7 @@ MonoBehaviour:
         - rid: 5023281015877534626
         m_RegisteredObservers: []
     - rid: 5023281015877534617
-      type: {class: CanAcquireTokenCondition, ns: , asm: Assembly-CSharp}
+      type: {class: CanAcquireTokenCondition, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         Graph:
           rid: 5023280968466956564
@@ -2247,7 +2247,7 @@ MonoBehaviour:
         Director:
           rid: 5023280987739259457
     - rid: 5023281015877534618
-      type: {class: TacticalPositioningAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: TacticalPositioningAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 12094719350125213675
@@ -2275,7 +2275,7 @@ MonoBehaviour:
         AntiClusteringNoise:
           rid: 5023281015877534633
     - rid: 5023281015877534619
-      type: {class: HesitateAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: HesitateAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 2133716935815510816
@@ -2333,7 +2333,7 @@ MonoBehaviour:
         Name: 
         m_Value: 1
     - rid: 5023281015877534625
-      type: {class: AcquireAttackTokenAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: AcquireAttackTokenAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 14083302420345578504
@@ -2441,7 +2441,7 @@ MonoBehaviour:
         Name: 
         m_Value: 2.5
     - rid: 5023281015877534637
-      type: {class: ApproachCombatSlotAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: ApproachCombatSlotAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 7943851925301311032
@@ -2519,7 +2519,7 @@ MonoBehaviour:
         Name: 
         m_Value: 0.5
     - rid: 5023281015877534644
-      type: {class: CheckAttackRangeAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: CheckAttackRangeAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 15689953888402894837
@@ -2547,7 +2547,7 @@ MonoBehaviour:
         - rid: 5023281015877534647
         m_RegisteredObservers: []
     - rid: 5023281015877534646
-      type: {class: HesitateAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: HesitateAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 8679273310198402681
@@ -2603,7 +2603,7 @@ MonoBehaviour:
         Name: 
         m_Value: 1.5
     - rid: 5023281015877534651
-      type: {class: ExecuteAttackAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: ExecuteAttackAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 5729259462906143968
@@ -2615,7 +2615,7 @@ MonoBehaviour:
         Agent:
           rid: 5023280987739259456
     - rid: 5023281015877534652
-      type: {class: ProbabilisticTokenReleaseAction, ns: GyeNyame.AI.Nodes, asm: Assembly-CSharp}
+      type: {class: ProbabilisticTokenReleaseAction, ns: GyeNyame.AI.Nodes, asm: GyeNyame.AI}
       data:
         ID:
           m_Value0: 18351780805575895943

@@ -21,6 +21,7 @@ namespace GyeNyame.Player.Combat.States
         public override void Enter()
         {
             base.Enter();
+            EventBus.Publish(new PlayerDiedMessage());
             _slowMotionFinished = false;
             _slowMotionTimer = SlowMotionDuration;
             
