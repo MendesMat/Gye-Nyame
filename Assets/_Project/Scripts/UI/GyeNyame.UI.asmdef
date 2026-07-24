@@ -1,0 +1,16 @@
+{
+    "name": "GyeNyame.UI",
+    "rootNamespace": "GyeNyame.UI",
+    "references": [
+        "GyeNyame.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -6,7 +6,9 @@
   <Project Path="GyeNyame.Combat.csproj" />
   <Project Path="GyeNyame.Player.Combat.csproj" />
   <Project Path="GyeNyame.Player.Input.csproj" />
+  <Project Path="GyeNyame.Core.Editor.csproj" />
   <Project Path="GyeNyame.InputSystem.csproj" />
+  <Project Path="GyeNyame.UI.csproj" />
   <Project Path="GyeNyame.Player.Movement.csproj" />
   <Project Path="GyeNyame.Physics.csproj" />
 </Solution>
