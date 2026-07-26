@@ -2,16 +2,27 @@ using UnityEngine;
 using GyeNyame.Core.Contracts.Data;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Combat.Data;
+using GyeNyame.Core.StateMachine;
 
 namespace GyeNyame.Combat.Components
 {
     [RequireComponent(typeof(Collider))]
     public class HitboxComponent : MonoBehaviour, IHitbox
     {
+        [Header("Components")]
         [SerializeField] private Collider hitboxCollider;
         [SerializeField] private AttackDataSO attackData;
+        [SerializeField] private StateMachine stateMachine;
 
         public AttackDataSO BoundAttackData => attackData;
+
+        private void Awake()
+        {
+            if (stateMachine == null)
+            {
+                stateMachine = GetComponentInParent<StateMachine>();
+            }
+        }
 
         public void EnableHitbox()
         {
@@ -34,10 +45,12 @@ namespace GyeNyame.Combat.Components
 
             if (other.TryGetComponent(out IHurtbox hurtbox))
             {
-                DamageData damagePayload = new DamageData
+                var originPos = stateMachine != null ? stateMachine.transform.position : transform.position;
+
+                var damagePayload = new DamageData
                 (
                     attackData.Damage,
-                    transform.root.position,
+                    originPos,
                     attackData.KnockbackForce,
                     attackData.KnockupForce,
                     attackData.HitStopTime

@@ -51,7 +51,7 @@ namespace GyeNyame.Enemy
         protected virtual void ApplyKnockback(DamageData data)
         {
             var hurtState = stateMachine.GetOrCreateState<EntityHurtState>();
-            hurtState.InitializeHurt(data, transform.root.position);
+            hurtState.InitializeHurt(data, transform.position);
             stateMachine.ChangeState(hurtState);
         }
 

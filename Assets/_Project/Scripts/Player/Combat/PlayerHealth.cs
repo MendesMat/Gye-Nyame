@@ -29,7 +29,7 @@ namespace GyeNyame.Player.Combat
             base.OnDamageReceived(data);
 
             var hurtState = _stateMachine.GetOrCreateState<PlayerHurtState>();
-            hurtState.InitializeHurt(data, transform.root.position);
+            hurtState.InitializeHurt(data, transform.position);
             
             _stateMachine.ChangeState(hurtState);
         }

@@ -4,11 +4,15 @@ using GyeNyame.Core.Contracts.Data;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Core.Contracts.Messages;
 using GyeNyame.Core.Events;
+using GyeNyame.Core.StateMachine;
 
 namespace GyeNyame.Combat.Components
 {
     public class EntityHealth : MonoBehaviour, IDamageable, IEntityHealth
     {
+        [Header("Components")]
+        [SerializeField] protected StateMachine stateMachine;
+
         [Header("Health Settings")]
         [SerializeField] protected float maxHealth = 100f;
         
@@ -30,6 +34,11 @@ namespace GyeNyame.Combat.Components
             currentHealth = maxHealth;
             _originalLayer = gameObject.layer;
             _deadLayerIndex = LayerMask.NameToLayer(deadLayerName);
+
+            if (stateMachine == null)
+            {
+                stateMachine = GetComponentInParent<StateMachine>();
+            }
         }
 
         public void SetDeadLayer(bool isDeadLayer)
@@ -44,7 +53,7 @@ namespace GyeNyame.Combat.Components
             currentHealth -= damageData.Amount;
             if (currentHealth < 0) currentHealth = 0;
 
-            EventBus.Publish(new EntityDamagedMessage(transform.root.gameObject, damageData));
+            EventBus.Publish(new EntityDamagedMessage(GetEntityRoot(), damageData));
 
             OnDamageTakenEvent?.Invoke(damageData);
             OnDamageReceived(damageData);
@@ -63,7 +72,13 @@ namespace GyeNyame.Combat.Components
 
         protected virtual void Die()
         {
-            EventBus.Publish(new EntityDeadMessage(gameObject));
+            EventBus.Publish(new EntityDeadMessage(GetEntityRoot()));
+        }
+
+        public GameObject GetEntityRoot()
+        {
+            if (stateMachine != null) return stateMachine.gameObject;
+            return gameObject;
         }
     }
 }

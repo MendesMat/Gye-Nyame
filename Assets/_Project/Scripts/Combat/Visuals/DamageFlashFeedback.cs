@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using GyeNyame.Combat.Components;
 using GyeNyame.Core.Contracts.Data;
@@ -17,11 +17,13 @@ namespace GyeNyame.Combat.Visuals
 
         private Material originalMaterial;
         private Coroutine flashCoroutine;
+        private EntityHealth _entityHealth;
 
         private void Awake()
         {
             if(spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
             originalMaterial = spriteRenderer.material;
+            _entityHealth = GetComponentInParent<EntityHealth>();
         }
 
         private void OnEnable()
@@ -36,7 +38,8 @@ namespace GyeNyame.Combat.Visuals
 
         private void OnEntityDamaged(EntityDamagedMessage message)
         {
-            if (message.Target != transform.root.gameObject) return;
+            var targetObj = _entityHealth != null ? _entityHealth.GetEntityRoot() : transform.root.gameObject;
+            if (message.Target != targetObj) return;
             
             if (flashCoroutine != null) StopCoroutine(flashCoroutine);
             flashCoroutine = StartCoroutine(FlashRoutine(message.Damage.HitStopTime));
