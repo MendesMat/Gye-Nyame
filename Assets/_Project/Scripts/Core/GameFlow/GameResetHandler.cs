@@ -10,11 +10,21 @@ namespace GyeNyame.Core.GameFlow
     {
         [SerializeField] private float resetDelay = 3f;
 
-        private void OnEnable() => EventBus.Subscribe<GameOverMessage>(OnGameOver);
+        private void OnEnable()
+        {
+            EventBus.Subscribe<GameOverMessage>(OnGameOver);
+            EventBus.Subscribe<AllEnemiesDefeatedMessage>(OnAllEnemiesDefeated);
+        }
 
-        private void OnDisable() => EventBus.Unsubscribe<GameOverMessage>(OnGameOver);
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<GameOverMessage>(OnGameOver);
+            EventBus.Unsubscribe<AllEnemiesDefeatedMessage>(OnAllEnemiesDefeated);
+        }
 
         private void OnGameOver(GameOverMessage _) => StartCoroutine(ResetGameRoutine());
+
+        private void OnAllEnemiesDefeated(AllEnemiesDefeatedMessage _) => StartCoroutine(ResetGameRoutine());
 
         private IEnumerator ResetGameRoutine()
         {

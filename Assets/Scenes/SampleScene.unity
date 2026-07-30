@@ -2045,7 +2045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Stats.PlayerHealth
   stateMachine: {fileID: 1082542550}
-  maxHealth: 2
+  maxHealth: 1e+10
   deadLayerName: Dead
   _stateMachine: {fileID: 1082542550}
 --- !u!1 &1082542542
@@ -2646,6 +2646,7 @@ GameObject:
   - component: {fileID: 1320016225}
   - component: {fileID: 1320016226}
   - component: {fileID: 1320016227}
+  - component: {fileID: 1320016228}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2708,6 +2709,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GyeNyame.Core::GyeNyame.Core.GameFlow.GameResetHandler
   resetDelay: 2
+--- !u!114 &1320016228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320016223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae3d9b20f6430a49914980c630fd396, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GyeNyame.Core::GyeNyame.Core.GameFlow.LevelEnemyTracker
 --- !u!1 &1356795141
 GameObject:
   m_ObjectHideFlags: 0
