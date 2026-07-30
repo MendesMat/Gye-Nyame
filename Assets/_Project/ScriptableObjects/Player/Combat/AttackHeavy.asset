@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d806fa2804b59441ae85aa85064a466, type: 3}
   m_Name: AttackHeavy
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Data.AttackDataSO
-  damage: 3
+  damage: 2
   nextLightCombo: {fileID: 0}
   nextHeavyCombo: {fileID: 0}
   animationCategory: 8

@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Components.EntityHealth
   stateMachine: {fileID: 1284654825}
-  maxHealth: 2
+  maxHealth: 4
   deadLayerName: Dead
 --- !u!1 &105878118
 GameObject:
@@ -611,7 +611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Components.EntityHealth
   stateMachine: {fileID: 192263857}
-  maxHealth: 3
+  maxHealth: 4
   deadLayerName: Dead
 --- !u!65 &219784323
 BoxCollider:
@@ -833,7 +833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Components.EntityHealth
   stateMachine: {fileID: 1356795148}
-  maxHealth: 3
+  maxHealth: 4
   deadLayerName: Dead
 --- !u!65 &341648488
 BoxCollider:
@@ -2045,7 +2045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Stats.PlayerHealth
   stateMachine: {fileID: 1082542550}
-  maxHealth: 1e+10
+  maxHealth: 6
   deadLayerName: Dead
   _stateMachine: {fileID: 1082542550}
 --- !u!1 &1082542542
@@ -3555,7 +3555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: GyeNyame.Combat::GyeNyame.Combat.Components.EntityHealth
   stateMachine: {fileID: 1761001101}
-  maxHealth: 3
+  maxHealth: 4
   deadLayerName: Dead
 --- !u!65 &1536048751
 BoxCollider:
