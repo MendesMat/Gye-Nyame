@@ -3,6 +3,7 @@ using GyeNyame.Core.StateMachine;
 using GyeNyame.Core.Contracts.Interfaces;
 using GyeNyame.Core.Events;
 using GyeNyame.Core.Contracts.Messages;
+using Unity.Behavior;
 
 namespace GyeNyame.Entities.Combat.States
 {
@@ -31,6 +32,10 @@ namespace GyeNyame.Entities.Combat.States
             locomotionContext?.SetFacingDirectionLock(true);
             locomotionContext?.DisablePhysics();
             healthContext?.SetDeadLayer(true);
+            
+            var behaviorAgent = (StateMachine as MonoBehaviour)?.GetComponent<BehaviorGraphAgent>();
+            if (behaviorAgent != null) behaviorAgent.enabled = false;
+
             EventBus.Subscribe<AnimationFinishDeathMessage>(OnAnimationFinish);
         }
 
