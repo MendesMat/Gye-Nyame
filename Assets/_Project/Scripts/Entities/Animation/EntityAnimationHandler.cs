@@ -73,6 +73,8 @@ namespace GyeNyame.Entities.Animation
 
         protected virtual void PlayAnimationForState(BaseState previous, BaseState next)
         {
+            if (stateMachine.CurrentState != next) return;
+
             if (TryPlayStandardAnimation(next)) return;
             
             HandleCustomAnimation(next);

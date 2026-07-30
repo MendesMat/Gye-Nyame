@@ -28,6 +28,8 @@ namespace GyeNyame.Combat.Components
         protected float currentHealth;
         private int _originalLayer;
         private int _deadLayerIndex;
+        private bool _isDeathDeferred;
+        private bool _hasPendingDeath;
 
         protected virtual void Awake()
         {
@@ -62,9 +64,36 @@ namespace GyeNyame.Combat.Components
             CheckDeath();
         }
 
+        public void DeferDeath()
+        {
+            _isDeathDeferred = true;
+        }
+
+        public void ExecuteDeferredDeath()
+        {
+            if (!_hasPendingDeath) return;
+            
+            _hasPendingDeath = false;
+            _isDeathDeferred = false;
+            Die();
+        }
+
+        public void CancelDeathDeferral()
+        {
+            _isDeathDeferred = false;
+            _hasPendingDeath = false;
+        }
+
         private void CheckDeath()
         {
             if (currentHealth > 0) return;
+            
+            if (_isDeathDeferred)
+            {
+                _hasPendingDeath = true;
+                return;
+            }
+
             Die();
         }
 

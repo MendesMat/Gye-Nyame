@@ -2045,7 +2045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GyeNyame.Player.Stats.PlayerHealth
   stateMachine: {fileID: 1082542550}
-  maxHealth: 5
+  maxHealth: 2
   deadLayerName: Dead
   _stateMachine: {fileID: 1082542550}
 --- !u!1 &1082542542

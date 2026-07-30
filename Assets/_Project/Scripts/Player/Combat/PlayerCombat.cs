@@ -59,6 +59,7 @@ namespace GyeNyame.Player.Combat
             EventBus.Subscribe<PlayerAttackHeavyMessage>(OnAttackHeavy);
             EventBus.Subscribe<PlayerDashMessage>(OnDashMessage);
             EventBus.Subscribe<PlayerJumpMessage>(OnJumpMessage);
+            stateMachine.OnStateChanged += OnCombatStateExited;
         }
 
         private void OnDisable()
@@ -67,6 +68,7 @@ namespace GyeNyame.Player.Combat
             EventBus.Unsubscribe<PlayerAttackHeavyMessage>(OnAttackHeavy);
             EventBus.Unsubscribe<PlayerDashMessage>(OnDashMessage);
             EventBus.Unsubscribe<PlayerJumpMessage>(OnJumpMessage);
+            stateMachine.OnStateChanged -= OnCombatStateExited;
         }
 
         private void Update()
@@ -194,6 +196,20 @@ namespace GyeNyame.Player.Combat
         {
             if (_currentAttackData == null) return;
             if (_hitboxMap.TryGetValue(_currentAttackData, out var hitbox))
+            {
+                hitbox.DisableHitbox();
+            }
+        }
+
+        private void OnCombatStateExited(BaseState previous, BaseState next)
+        {
+            if (previous is not BaseEntityAttackState) return;
+            ForceCloseAllHitboxes();
+        }
+
+        private void ForceCloseAllHitboxes()
+        {
+            foreach (var hitbox in _hitboxMap.Values)
             {
                 hitbox.DisableHitbox();
             }
