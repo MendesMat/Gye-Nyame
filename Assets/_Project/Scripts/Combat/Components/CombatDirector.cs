@@ -138,11 +138,13 @@ namespace GyeNyame.Combat.Components
         private void OnEnable()
         {
             EventBus.Subscribe<PlayerDiedMessage>(OnPlayerDied);
+            EventBus.Subscribe<EntityDeadMessage>(OnEntityDead);
         }
 
         private void OnDisable()
         {
             EventBus.Unsubscribe<PlayerDiedMessage>(OnPlayerDied);
+            EventBus.Unsubscribe<EntityDeadMessage>(OnEntityDead);
         }
 
         private void OnPlayerDied(PlayerDiedMessage message)
@@ -150,6 +152,12 @@ namespace GyeNyame.Combat.Components
             _isPlayerDead = true;
             _activeAttackers.Clear();
             _enemyNoises.Clear();
+        }
+
+        private void OnEntityDead(EntityDeadMessage message)
+        {
+            if (message.Target == null) return;
+            UnregisterAttacker(message.Target);
         }
     }
 }

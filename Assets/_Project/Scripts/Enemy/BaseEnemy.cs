@@ -50,6 +50,8 @@ namespace GyeNyame.Enemy
 
         protected virtual void ApplyKnockback(DamageData data)
         {
+            if (stateMachine.CurrentState is EntityDeadState) return;
+            
             var hurtState = stateMachine.GetOrCreateState<EntityHurtState>();
             hurtState.InitializeHurt(data, transform.position);
             stateMachine.ChangeState(hurtState);

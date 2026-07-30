@@ -19,6 +19,7 @@ namespace GyeNyame.Enemy.Combat
         private readonly Dictionary<AttackDataSO, IHitbox> _hitboxMap = new();
 
         private IEntityLocomotion _locomotionContext;
+        private IEntityHealth _health;
         private IAttackDirector _attackDirector;
         private float _cooldownEndTime;
 
@@ -30,6 +31,7 @@ namespace GyeNyame.Enemy.Combat
         private void Awake()
         {
             _locomotionContext = GetComponent<IEntityLocomotion>();
+            _health = GetComponentInChildren<IEntityHealth>();
             _attackDirector = combatDirector;
 
             if (_attackDirector == null)
@@ -69,6 +71,7 @@ namespace GyeNyame.Enemy.Combat
 
         public void TryAttack()
         {
+            if (_health != null && _health.IsDead) return;
             if (IsInCooldown) return;
             if (stateMachine.CurrentState is BaseEntityAttackState) return;
 

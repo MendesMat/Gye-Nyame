@@ -34,7 +34,7 @@ namespace GyeNyame.Player.Input
             _inputActions.Player.AttackLight.performed -= OnAttackLightPerformed;
             _inputActions.Player.AttackHeavy.performed -= OnAttackHeavyPerformed;
 
-            _inputActions.Player.Disable();
+            _inputActions.Disable();
         }
 
         // Movement

@@ -11,9 +11,12 @@ namespace GyeNyame.Enemy.Movement
     [RequireComponent(typeof(StateMachine))]
     public class EnemyMovement : BaseEntityMovement, IEnemyMovement
     {
+        private IEntityHealth _health;
+
         protected override void Awake()
         {
             base.Awake();
+            _health = GetComponentInChildren<IEntityHealth>();
             InitializeStateMachine();
         }
 
@@ -35,6 +38,7 @@ namespace GyeNyame.Enemy.Movement
         private void OnEndCombatMessage(EndCombatMessage message)
         {
             if (message.Entity != gameObject) return;
+            if (_health != null && _health.IsDead) return;
             
             if (HasMoveInput)
                 stateMachine.ChangeState(stateMachine.GetOrCreateState<EntityWalkState>());
@@ -59,6 +63,8 @@ namespace GyeNyame.Enemy.Movement
 
         private void Update()
         {
+            if (_health != null && _health.IsDead) return;
+
             if (HasMoveInput && stateMachine.CurrentState is EntityIdleState)
             {
                 stateMachine.ChangeState(stateMachine.GetOrCreateState<EntityWalkState>());
