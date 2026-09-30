@@ -129,5 +129,6 @@ Valores novos que o multiplayer cria. Ficarão em `MatchRules` e `DifficultySett
 
 | Assunto | Situação |
 |---|---|
-| Os dois jogadores colidem entre si? | Hoje colidem. Recomendação técnica: não colidir ([multiplayer/game-rules.md](../multiplayer/game-rules.md#colisão-entre-os-dois-jogadores)) |
 | Valores de dupla da tabela acima | A definir durante os playtests |
+
+Decidido: os dois jogadores **não colidem** entre si ([ADR 0021](../decisions/0021-jogadores-nao-colidem-entre-si.md)).

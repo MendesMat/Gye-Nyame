@@ -34,7 +34,8 @@ Legenda: ✅ mantém · 🔶 adapta · 🔴 reescreve · ➕ novo
 
 | Arquivo | Status | Mudança |
 |---|---|---|
-| `KinematicPhysics.cs` | ✅ | Roda só onde a entidade é simulada (dono ou host) |
+| `KinematicPhysics.cs` | 🔶 | Roda só onde a entidade é simulada (dono ou host). Jogadores não bloqueiam jogadores ([0021](../decisions/0021-jogadores-nao-colidem-entre-si.md)): conferir se o `SweepTest` respeita a matriz de layers |
+| Layer Collision Matrix | 🔶 | Desmarcar `Player × Player` |
 
 ## Entities
 

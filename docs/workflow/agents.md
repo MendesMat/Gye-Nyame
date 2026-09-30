@@ -28,10 +28,11 @@ Backlog ─► [1. Pesquisa] ─► Pesquisada ─► [2. Execução] ─► Em 
 **Entrada:** a issue. **Saída:** um comentário na issue. **Não altera código.**
 
 1. Leia a issue, o [`CLAUDE.md`](../../CLAUDE.md), os documentos de `docs/` citados e as ADRs relacionadas.
-2. Leia o código que será tocado e o que depende dele.
-3. Se precisar do Editor para entender cena, prefab ou asset, use a Unity CLI só para **ler** ([unity-cli.md](unity-cli.md)).
-4. Publique o comentário no formato abaixo (`gh issue comment <n> --body-file ...`).
-5. Se "Perguntas em aberto" não estiver vazia: adicione `needs-decision` e **pare**. Senão, mova para `Pesquisada`.
+2. **Defina as skills necessárias** para a execução, pelo catálogo em [skills.md](skills.md). `clean-code` entra sempre que houver código. Carregue as skills de domínio também na pesquisa, se ajudarem a planejar.
+3. Leia o código que será tocado e o que depende dele.
+4. Se precisar do Editor para entender cena, prefab ou asset, use a Unity CLI só para **ler** ([unity-cli.md](unity-cli.md)).
+5. Publique o comentário no formato abaixo (`gh issue comment <n> --body-file ...`).
+6. Se "Perguntas em aberto" não estiver vazia: adicione `needs-decision` e **pare**. Senão, mova para `Pesquisada`.
 
 ### Formato do comentário de pesquisa
 
@@ -39,6 +40,10 @@ Backlog ─► [1. Pesquisa] ─► Pesquisada ─► [2. Execução] ─► Em 
 ## Pesquisa
 
 **Commit de referência:** <SHA da main no momento da pesquisa>
+
+### Skills necessárias
+- `anthropic-skills:clean-code`: todo o código da issue
+- `unity:<skill>`: para qual parte da tarefa
 
 ### Leitura obrigatória
 - `caminho/arquivo.cs` (linhas X–Y): por quê
@@ -67,13 +72,14 @@ O que pode dar errado; invariantes que não podem quebrar.
 **Entrada:** a issue e o comentário de pesquisa. **Saída:** um PR.
 
 1. Compare a `main` com o **commit de referência** (`git diff <SHA>..origin/main --stat`). Se algo relevante mudou nos arquivos da leitura obrigatória, **não execute**: comente o motivo e mova de volta para `Backlog` (nova pesquisa).
-2. Crie a branch a partir da `main` ([git.md](git.md#branches)).
-3. Leia **só** o que a pesquisa indicou (e o que descobrir que é necessário, registrando no PR).
-4. Implemente seguindo o plano. Se o plano se mostrar errado, pare e comente na issue em vez de improvisar uma mudança de arquitetura.
-5. Cena, prefab e asset: **sempre pela Unity CLI** com Editor conectado ([unity-cli.md](unity-cli.md)).
-6. Escreva ou atualize os testes; rode `unity test`.
-7. Atualize `docs/` (e `known-issues.md`, se resolveu algum item).
-8. Abra o PR ([git.md](git.md#pull-requests)) e mova para `Em revisão`.
+2. **Carregue todas as skills listadas em "Skills necessárias"** antes de escrever qualquer coisa. Se descobrir que falta uma, carregue-a e registre no PR.
+3. Crie a branch a partir da `main` ([git.md](git.md#branches)).
+4. Leia **só** o que a pesquisa indicou (e o que descobrir que é necessário, registrando no PR).
+5. Implemente seguindo o plano e as orientações das skills carregadas. Se o plano se mostrar errado, pare e comente na issue em vez de improvisar uma mudança de arquitetura.
+6. Cena, prefab e asset: **sempre pela Unity CLI** com Editor conectado ([unity-cli.md](unity-cli.md)).
+7. Escreva ou atualize os testes; rode `unity test`.
+8. Atualize `docs/` (e `known-issues.md`, se resolveu algum item).
+9. Abra o PR ([git.md](git.md#pull-requests)) e mova para `Em revisão`.
 
 Limites: **uma issue por PR, até ~400 linhas alteradas** (sem contar assets gerados). Se não couber, pare e proponha dividir a issue.
 
@@ -81,8 +87,11 @@ Limites: **uma issue por PR, até ~400 linhas alteradas** (sem contar assets ger
 
 **Entrada:** o PR, a issue e o comentário de pesquisa. **Saída:** uma revisão no PR.
 
+Antes de revisar, **carregue as mesmas skills listadas na pesquisa** (inclusive `clean-code`).
+
 Confira:
 - [ ] Todos os critérios de aceite atendidos.
+- [ ] O código segue a skill `clean-code` e as orientações das skills da Unity da issue.
 - [ ] Nenhuma ADR contrariada; regras de dependência entre assemblies respeitadas ([overview](../architecture/overview.md#assemblies-e-dependências)).
 - [ ] Regras de autoridade respeitadas em código de rede ([authority.md](../multiplayer/authority.md)).
 - [ ] Nenhum valor de design fixo em código ([0015](../decisions/0015-valores-de-design-em-scriptableobjects.md)).
@@ -101,6 +110,7 @@ Só o arquiteto aprova e faz o merge (squash). Ele também roda os checklists ma
 
 ## Regras gerais para qualquer agente
 
+- **Skills antes de código.** `clean-code` sempre; skills da Unity em cada caso adequado ([skills.md](skills.md)).
 - **Não decida no lugar do arquiteto.** ADR aceita não se rediscute; dúvida de escopo, design ou arquitetura vira `needs-decision`.
 - **Não amplie o escopo.** Encontrou outro problema? Comente na issue ou proponha uma issue nova; não corrija de carona.
 - **Não edite `.unity`/`.prefab`/`.asset` à mão** se houver Editor conectado.

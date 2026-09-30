@@ -11,7 +11,7 @@ Há um único programador, que atua como **arquiteto**. A execução do código 
 
 Cada issue passa por **três agentes, em três janelas de contexto separadas**, e termina com a aprovação humana:
 
-1. **Pesquisa:** lê tudo que a issue exige e publica um comentário estruturado na issue (commit de referência, leitura obrigatória, estado atual, plano, armadilhas, critérios de aceite refinados, perguntas em aberto).
+1. **Pesquisa:** lê tudo que a issue exige e publica um comentário estruturado na issue (commit de referência, skills necessárias ([0022](0022-skills-obrigatorias-para-agentes.md)), leitura obrigatória, estado atual, plano, armadilhas, critérios de aceite refinados, perguntas em aberto).
 2. **Execução:** um agente novo lê o comentário, implementa numa branch própria e abre um PR.
 3. **Revisão:** um agente novo revisa o PR contra os critérios de aceite, as ADRs e a documentação, e roda os testes.
 4. **Merge:** **só o arquiteto aprova e faz o merge.**

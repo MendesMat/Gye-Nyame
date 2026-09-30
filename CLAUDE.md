@@ -10,10 +10,14 @@ Este arquivo é o ponto de entrada. A fonte da verdade é a pasta [`docs/`](docs
 2. Leia o documento do módulo que você vai tocar em [`docs/architecture/`](docs/architecture/).
 3. Se a tarefa envolve rede, coop ou regras novas, leia [`docs/multiplayer/`](docs/multiplayer/).
 4. Consulte [`docs/decisions/`](docs/decisions/README.md) antes de propor uma alternativa: **decisões registradas não são rediscutidas** dentro de uma issue. Se achar que uma decisão está errada, pare e pergunte (label `needs-decision`).
-5. Siga o fluxo de trabalho em [`docs/workflow/agents.md`](docs/workflow/agents.md) (pesquisa → execução → revisão).
+5. **Defina as skills que a tarefa exige e carregue-as antes de começar** ([`docs/workflow/skills.md`](docs/workflow/skills.md)):
+   - **`clean-code` é obrigatória para gerar ou alterar qualquer código;**
+   - **as skills da Unity são obrigatórias em cada caso adequado** (UI, rede, física, pacotes, Editor via CLI…).
+6. Siga o fluxo de trabalho em [`docs/workflow/agents.md`](docs/workflow/agents.md) (pesquisa → execução → revisão).
 
 ## Regras que nunca mudam
 
+- **Todo código segue a skill `clean-code`**, e toda tarefa usa as skills da Unity do seu domínio. Veja [ADR 0022](docs/decisions/0022-skills-obrigatorias-para-agentes.md).
 - **Core não depende de ninguém.** Módulos conversam por interfaces em `Core/Contracts` ou mensagens no `EventBus`. Veja [overview](docs/architecture/overview.md).
 - **Todo número ajustável de design fica em ScriptableObject** e é documentado em [`docs/design/tuning.md`](docs/design/tuning.md). Nada de constante mágica em código de gameplay.
 - **Não edite `.unity`, `.prefab` ou `.asset` à mão** quando houver Editor conectado. Use a Unity CLI. Veja [`docs/workflow/unity-cli.md`](docs/workflow/unity-cli.md).

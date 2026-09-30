@@ -37,4 +37,4 @@ Com a entidade selecionada, o Gizmo mostra a esfera (verde) e a direção do cas
 
 ## Colisão entre corpos
 
-Quem bloqueia quem é definido pela **Layer Collision Matrix** (Project Settings → Physics). Hoje `Player`, `Enemy`, `Ground` e `Interactables` colidem entre si, inclusive **Player com Player**. Veja [scene-and-assets.md](scene-and-assets.md#layers-e-matriz-de-colisão).
+Quem bloqueia quem é definido pela **Layer Collision Matrix** (Project Settings → Physics). Hoje `Player`, `Enemy`, `Ground` e `Interactables` colidem entre si, inclusive **Player com Player**. Isso vai mudar: os jogadores não colidirão entre si ([ADR 0021](../decisions/0021-jogadores-nao-colidem-entre-si.md)). Veja [scene-and-assets.md](scene-and-assets.md#layers-e-matriz-de-colisão).

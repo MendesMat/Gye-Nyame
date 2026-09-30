@@ -28,6 +28,8 @@ Cada arquivo registra **uma** decisão de arquitetura, de design ou de processo:
 | [0018](0018-testes-e-definicao-de-pronto.md) | Estratégia de testes e definição de pronto | Aceita |
 | [0019](0019-agentes-operam-o-editor-via-unity-cli.md) | Agentes operam o Editor pela Unity CLI | Aceita |
 | [0020](0020-escopo-da-transicao.md) | Escopo da transição e não-objetivos | Aceita |
+| [0021](0021-jogadores-nao-colidem-entre-si.md) | Os jogadores não colidem entre si | Aceita |
+| [0022](0022-skills-obrigatorias-para-agentes.md) | Skills obrigatórias para agentes (clean code + Unity) | Aceita |
 
 ## Modelo
 

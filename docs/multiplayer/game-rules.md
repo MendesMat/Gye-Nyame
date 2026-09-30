@@ -71,7 +71,7 @@ Base: [0012](../decisions/0012-camera-compartilhada.md).
 
 ## Colisão entre os dois jogadores
 
-Hoje a layer `Player` colide com ela mesma, então os dois personagens se bloqueariam. **Pendente de decisão do game designer.** Recomendação técnica: **não colidir**, como é comum no gênero (evita um jogador empurrar ou prender o outro contra a borda da câmera). Até a decisão, a issue que tratar disso recebe `needs-decision`.
+**Os dois jogadores não colidem entre si:** um atravessa o outro ([0021](../decisions/0021-jogadores-nao-colidem-entre-si.md)). Eles continuam colidindo com inimigos, chão e paredes. Hoje a layer `Player` ainda colide com ela mesma; a mudança na matriz faz parte da migração.
 
 ## Fogo amigo
 
