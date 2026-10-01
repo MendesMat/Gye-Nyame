@@ -13,7 +13,21 @@ Este arquivo é o ponto de entrada. A fonte da verdade é a pasta [`docs/`](docs
 5. **Defina as skills que a tarefa exige e carregue-as antes de começar** ([`docs/workflow/skills.md`](docs/workflow/skills.md)):
    - **`clean-code` é obrigatória para gerar ou alterar qualquer código;**
    - **as skills da Unity são obrigatórias em cada caso adequado** (UI, rede, física, pacotes, Editor via CLI…).
-6. Siga o fluxo de trabalho em [`docs/workflow/agents.md`](docs/workflow/agents.md) (pesquisa → execução → revisão).
+6. Siga o protocolo das três sessões em [`docs/workflow/agents.md`](docs/workflow/agents.md) (levantamento → execução → revisão).
+
+## Trabalhando numa issue
+
+Cada issue passa por três sessões de contexto zerado, cada uma iniciada por um comando:
+
+| Comando | Fase | Só começa se a issue estiver em |
+|---|---|---|
+| `/levantar-issue N` | Levantamento: comenta na issue, não altera código | backlog (sem label de estado) e sem bloqueadoras abertas |
+| `/executar-issue N` | Execução: implementa e abre o PR | `estado:pronta-para-execução` |
+| `/revisar-issue N` | Revisão: **só relata** no PR, não corrige | `estado:em-revisão` |
+
+- **Estado errado, sessão recusa.** Não conserte o estado para poder começar.
+- `needs-decision` bloqueia qualquer comando até o arquiteto responder.
+- Estado e quadro: `bash tools/workflow/issue-state.sh status|set|clear <N> [estado]`.
 
 ## Regras que nunca mudam
 

@@ -169,3 +169,6 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+
+# Scripts de shell sempre com LF, para rodarem no Git Bash e em outros sistemas
+*.sh                    text eol=lf
