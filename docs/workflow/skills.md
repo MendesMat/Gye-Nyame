@@ -6,7 +6,7 @@
 
 1. **`clean-code` é obrigatória** para gerar ou alterar qualquer código.
 2. **Skills da Unity são obrigatórias** sempre que a tarefa cair no domínio delas.
-3. **Defina as skills antes de começar:** a pesquisa lista as skills no comentário da issue; a execução carrega todas antes de escrever código; a revisão confere se o código segue as orientações delas.
+3. **Defina as skills antes de começar:** o levantamento lista as skills no comentário da issue; a execução carrega todas antes de escrever código; a revisão confere se o código segue as orientações delas.
 4. Se uma skill contradizer uma ADR ou `docs/`, **vale a ADR**. Registre o conflito na issue.
 
 Os nomes abaixo são os identificadores das skills no Claude Code. Em outro cliente de IA, use a skill equivalente de mesmo nome.
@@ -38,7 +38,7 @@ Os nomes abaixo são os identificadores das skills no Claude Code. Em outro clie
 
 Skills da Unity **fora do escopo atual** (não usar sem uma ADR que mude o escopo): `initialize-ai-navigation` (a IA usa Behavior Graph, não NavMesh), `build-live-game`, `implement-in-app-purchases`, `levelplay-unity-integration`, `localization`, `setup-vivox-voice-chat`, `optimize-web`, `migrate-birp-to-urp`.
 
-## Exemplo de seção no comentário de pesquisa
+## Exemplo de seção no comentário de levantamento
 
 ```markdown
 ### Skills necessárias

@@ -30,6 +30,7 @@ Cada arquivo registra **uma** decisão de arquitetura, de design ou de processo:
 | [0020](0020-escopo-da-transicao.md) | Escopo da transição e não-objetivos | Aceita |
 | [0021](0021-jogadores-nao-colidem-entre-si.md) | Os jogadores não colidem entre si | Aceita |
 | [0022](0022-skills-obrigatorias-para-agentes.md) | Skills obrigatórias para agentes (clean code + Unity) | Aceita |
+| [0023](0023-protocolo-das-tres-sessoes.md) | Protocolo das três sessões: comandos, estados e revisão que só relata | Aceita |
 
 ## Modelo
 

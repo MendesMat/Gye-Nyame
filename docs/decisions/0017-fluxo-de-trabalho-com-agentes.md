@@ -2,6 +2,7 @@
 
 - **Status:** Aceita
 - **Data:** 2026-09-30
+- **Complementada por:** [0023](0023-protocolo-das-tres-sessoes.md), que define os comandos, as labels de estado e o que a revisão pode fazer. A fase "pesquisa" passou a se chamar **levantamento**, e os nomes das colunas do quadro mudaram.
 
 ## Contexto
 

@@ -45,7 +45,7 @@ O que existe **hoje** no código (singleplayer):
 
 - [decisions/](decisions/README.md): registros de decisão (ADRs)
 - [design/tuning.md](design/tuning.md): guia de valores ajustáveis para o game designer
-- [workflow/agents.md](workflow/agents.md): pesquisa → execução → revisão
+- [workflow/agents.md](workflow/agents.md): protocolo das três sessões (levantamento → execução → revisão), estados e comandos
 - [workflow/skills.md](workflow/skills.md): quais skills usar em cada caso (clean code obrigatória)
 - [workflow/git.md](workflow/git.md): branches, PRs, Smart Merge, LFS
 - [workflow/unity-cli.md](workflow/unity-cli.md): como agentes operam o Editor
